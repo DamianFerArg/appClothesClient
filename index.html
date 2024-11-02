@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario de Ropa</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Gestión de Inventario de Ropa</h1>
+        <a href="add_item.html">Agregar</a>
+    </header>
+
+    <section id="inventory">
+        <h2>Inventario Actual</h2>
+        <label for="categoria-select">Seleccionar Categoría:</label>
+        <select id="categoria-select">
+            <option value="all">Todos</option>
+            <option value="Hombre">Hombre</option>
+            <option value="Mujer">Mujer</option>
+            <option value="Niños">Niños</option>
+        </select>
+        
+        <div id="item-list" class="card-container"></div>
+    </section>
+
+    <!-- Edit Form Modal -->
+    <div id="edit-overlay" class="overlay hidden">
+        <section id="edit-item" class="modal">
+            <h2>Editar Prenda</h2>
+            <form id="form-editar">
+                <input type="hidden" id="edit-id">
+                <label for="edit-nombre">Nombre:</label>
+                <input type="text" id="edit-nombre" name="nombre" required>
+
+                <label for="edit-categoria">Categoría:</label>
+                <select id="edit-categoria" name="categoria" required>
+                    <option value="Hombre">Hombre</option>
+                    <option value="Mujer">Mujer</option>
+                    <option value="Niños">Niños</option>
+                </select>
+
+                <label for="edit-cantidad">Cantidad:</label>
+                <input type="number" id="edit-cantidad" name="cantidad" required>
+
+                <label for="edit-precio">Precio:</label>
+                <input type="number" id="edit-precio" name="precio" required>
+
+                <button type="submit">Guardar Cambios</button>
+                <button type="button" id="cancel-edit">Cancelar</button>
+            </form>
+        </section>
+    </div>
+
+    <script type="module" src="js/app.js"></script> 
+</body>
+</html>

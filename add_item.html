@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Prenda</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script type="module" src="js/add.js"></script>
+</head>
+<body>
+    <header>
+        <h1>Agregar Nueva Prenda</h1>
+        <a href="index.html">Volver</a>
+    </header>
+
+    <section id="add-item">
+        <h2>Agregar nueva prenda</h2>
+        <form id="form-agregar">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" name="categoria" required>
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
+                <option value="Niños">Niños</option>
+            </select>
+
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" id="cantidad" name="cantidad" required>
+
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" name="precio" required>
+
+            <button type="submit">Agregar Prenda</button>
+        </form>
+    </section>
+</body>
+<script type="module" src="js/add.js"></script> 
+</html>

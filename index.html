@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario de Ropa</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script>
+        // Redirect to login page if the user is not logged in
+        if (sessionStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "login.html";
+        }
+    </script>
 </head>
 <body>
     <header>

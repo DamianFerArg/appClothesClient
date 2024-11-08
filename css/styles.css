@@ -5,7 +5,7 @@ body {
 }
 
 header {
-    background: #4CAF50;
+    background: #38b6ff;
     color: white;
     padding: 10px 0;
     text-align: center;
@@ -27,7 +27,16 @@ label {
     margin: 10px 0 5px;
 }
 
-input, select, button {
+input{
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+
+}
+
+ select, button {
     width: 100%;
     padding: 10px;
     margin-bottom: 10px;
@@ -36,7 +45,7 @@ input, select, button {
 }
 
 button {
-    background: #4CAF50;
+    background: #38b6ff;
     color: white;
     border: none;
     cursor: pointer;
@@ -157,3 +166,31 @@ button:hover {
     border-radius: 5px;
     margin-bottom: 10px;
 }
+
+/* LOGIN */
+#login-section {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center; /* Center content */
+
+}
+
+.error-message {
+    color: red;
+    margin-top: 10px;
+    display: none;
+}
+
+.login-logo {
+    width: 200px;      /* Adjust size as needed */
+    height: 200px;
+    border-radius: 50%; /* Makes the image circular */
+    margin-bottom: 20px;
+    object-fit: cover;  /* Ensures the image scales properly */
+}
+
+/* LOGIN ENDS */

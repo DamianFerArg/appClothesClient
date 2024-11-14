@@ -18,7 +18,44 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 //------------------------------------------------------------------------------------------LOAD CATEGORIES & ITEMS
+async function populateEditCategories() {
+    try {
+        const categorySet = new Set();
 
+        // Fetch all items from Firestore to extract unique categories
+        const querySnapshot = await getDocs(collection(db, "inventario"));
+        querySnapshot.forEach((doc) => {
+            const item = doc.data();
+            if (item.categoria) {
+                categorySet.add(item.categoria); // Add category to the Set
+            }
+        });
+
+        // Select the edit-categoria dropdown
+        const editCategoriaSelect = document.getElementById("edit-categoria");
+
+        // Clear any existing options
+        editCategoriaSelect.innerHTML = "";
+
+        // Add options dynamically
+        categorySet.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            editCategoriaSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error("Error populating categories in edit form:", error);
+    }
+}
+
+// Call this function when the edit modal opens
+document.addEventListener("DOMContentLoaded", () => {
+    const editOverlay = document.getElementById("edit-overlay");
+
+    // Add an event listener to trigger category population when the overlay is shown
+    editOverlay.addEventListener("show", populateEditCategories);
+});
 // Function to load categories dynamically from Firestore
 function loadCategories() {
     getDocs(collection(db, "inventario")).then((querySnapshot) => {
@@ -104,40 +141,45 @@ function loadItems() {
 // Open the edit form with the item’s details
 function openEditForm(event) {
     const itemId = event.target.getAttribute('data-id');
-    const itemCard = event.target.parentElement;
     
-    // Get the item data from Firestore
-    getDoc(doc(db, "inventario", itemId)).then((docSnapshot) => {
-        if (docSnapshot.exists()) {
-            const itemData = docSnapshot.data();
+    // Populate the edit-categoria dropdown dynamically
+    populateEditCategories().then(() => {
+        // Get the item data from Firestore after populating the categories
+        getDoc(doc(db, "inventario", itemId)).then((docSnapshot) => {
+            if (docSnapshot.exists()) {
+                const itemData = docSnapshot.data();
 
-            // Populate the form fields correctly with data from Firestore
-            document.getElementById('edit-id').value = itemId;
-            document.getElementById('edit-codCatalogo').value = itemData.codigoCatalogo || '';
-            document.getElementById('edit-nombre').value = itemData.nombre || '';
-            document.getElementById('edit-categoria').value = itemData.categoria || '';
-            document.getElementById('edit-marca').value = itemData.marca || '';
-            document.getElementById('edit-cantidad').value = itemData.cantidad || '';
-            document.getElementById('edit-precio').value = itemData.precio || '';
-            document.getElementById('edit-talle').value = itemData.talle || '';
-            document.getElementById('edit-color').value = itemData.color || '';
-            
-            // Set the delete button's data-id attribute
-            const deleteButton = document.querySelector('.delete-btn');
-            deleteButton.setAttribute('data-id', itemId);
+                // Populate the form fields with data from Firestore
+                document.getElementById('edit-id').value = itemId;
+                document.getElementById('edit-codCatalogo').value = itemData.codigoCatalogo || '';
+                document.getElementById('edit-nombre').value = itemData.nombre || '';
+                document.getElementById('edit-marca').value = itemData.marca || '';
+                document.getElementById('edit-categoria').value = itemData.categoria || '';
+                document.getElementById('edit-cantidad').value = itemData.cantidad || '';
+                document.getElementById('edit-precio').value = itemData.precio || '';
+                document.getElementById('edit-talle').value = itemData.talle || '';
+                document.getElementById('edit-color').value = itemData.color || '';
 
-            // Attach the delete button listener
-            deleteButton.removeEventListener('click', handleDelete); // Remove any existing listener to avoid duplicates
-            deleteButton.addEventListener('click', handleDelete);
+                // Set the delete button's data-id attribute
+                const deleteButton = document.querySelector('.delete-btn');
+                deleteButton.setAttribute('data-id', itemId);
 
-            // Show the edit modal
-            document.getElementById('edit-item').classList.remove('hidden');
-            document.getElementById('edit-overlay').classList.remove('hidden');
-        }
-    }).catch(error => {
-        console.error("Error fetching document: ", error);
+                // Attach the delete button listener
+                deleteButton.removeEventListener('click', handleDelete); // Avoid duplicate listeners
+                deleteButton.addEventListener('click', handleDelete);
+
+                // Show the edit modal
+                document.getElementById('edit-item').classList.remove('hidden');
+                document.getElementById('edit-overlay').classList.remove('hidden');
+            }
+        }).catch((error) => {
+            console.error("Error fetching document: ", error);
+        });
+    }).catch((error) => {
+        console.error("Error populating categories: ", error);
     });
 }
+
 
 
 // Handle form submission for editing an item
@@ -149,7 +191,7 @@ document.getElementById('form-editar').addEventListener('submit', async function
         nombre: document.getElementById('edit-codCatalogo').value,
         nombre: document.getElementById('edit-nombre').value,
         categoria: document.getElementById('edit-categoria').value,
-        marca: parseInt(document.getElementById('edit-marca').value),
+        marca: document.getElementById('edit-marca').value,
         cantidad: parseInt(document.getElementById('edit-cantidad').value),
         precio: parseFloat(document.getElementById('edit-precio').value),
         talle: document.getElementById('edit-talle').value,  // Add talle

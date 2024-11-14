@@ -2,7 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 
-// Your web app's Firebase configuration (already in your HTML, so you can remove from there)
+// Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyBvluKIuZRR3CDlGeJSa6qYF0pAdgCpnBE",
     authDomain: "proyectclothes-b6e88.firebaseapp.com",
@@ -21,30 +21,41 @@ const db = getFirestore(app);
 console.log("Firebase App Initialized: ", app);
 console.log("Firestore Initialized: ", db);
 
-// Fetch and display inventory items from Firestore when the page loads
-// Fetch items from Firestore and categorize them
-// ... Existing Firebase and Firestore code ...
+// Function to load categories dynamically
+function loadCategories() {
+    getDocs(collection(db, "inventario")).then((querySnapshot) => {
+        const categoriaSelect = document.getElementById('categoria');
+        const categories = new Set(); // To store unique categories
 
-// Function to filter items based on selected category
+        querySnapshot.forEach((docSnapshot) => {
+            const itemData = docSnapshot.data();
+            if (itemData.categoria) {
+                categories.add(itemData.categoria); // Add category to the set
+            }
+        });
 
-// Fetch and display inventory items from Firestore when the page loads
-getDocs(collection(db, "inventario")).then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-        let itemData = doc.data();
-        
-        let item = document.createElement('li');
-        item.textContent = `${itemData.nombre} - Cantidad: ${itemData.cantidad} - Precio: ${itemData.precio} pesos`;
-        item.dataset.category = itemData.categoria; // Store category for filtering
+        // Clear existing categories in the select and add default option
+        categoriaSelect.innerHTML = '<option value="">Selecciona una categoría</option>';
 
-        document.getElementById('item-list').appendChild(item);
+        // Add categories dynamically to the select element
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category;
+            option.textContent = category;
+            categoriaSelect.appendChild(option);
+        });
+
+    }).catch(error => {
+        console.error("Error fetching categories from Firestore:", error);
     });
-}).catch(error => {
-    console.error("Error fetching Firestore data: ", error);
-});
+}
 
-
+// Add item to Firestore when form is submitted
 document.addEventListener('DOMContentLoaded', () => {
-    // Check if we are on the add_items page
+    // Load categories when the page is loaded
+    loadCategories();
+
+    // Check if we are on the add_item.html page
     if (window.location.pathname.includes('add_item.html')) {
         const form = document.getElementById('form-agregar');
         
@@ -53,18 +64,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
 
                 // Get form values
+                let idProducto = document.getElementById('idProducto').value;
+                let codigoCatalogo = document.getElementById('codigoCatalogo').value;
                 let nombre = document.getElementById('nombre').value;
+                let marca = document.getElementById('marca').value;
                 let categoria = document.getElementById('categoria').value;
                 let cantidad = document.getElementById('cantidad').value;
                 let precio = document.getElementById('precio').value;
+                let talle = document.getElementById('talle').value; // New field
+                let color = document.getElementById('color').value; // New field
+
+                // Ensure category is selected
+                if (!categoria) {
+                    alert('Por favor selecciona una categoría.');
+                    return;
+                }
 
                 // Create new document in Firestore
                 try {
                     await addDoc(collection(db, "inventario"), {
-                        nombre: nombre,
-                        categoria: categoria,
-                        cantidad: parseInt(cantidad),
-                        precio: parseFloat(precio)
+                        idProducto: idProducto || null,  // Handling ID Product
+                        codigoCatalogo: codigoCatalogo || "",  // Handling Catalog Code
+                        nombre: nombre || "Sin nombre",  // Default if not provided
+                        marca: marca || "Sin marca",  // Default if not provided
+                        categoria: categoria || "Sin categoría",  // Default if not provided
+                        talle: talle || "Unico",  // Default if not provided
+                        color: color || "Sin color",  // Default if not provided
+                        cantidad: parseInt(cantidad) || 0,  // Ensure valid quantity
+                        precio: parseFloat(precio.replace("$", "").trim()) || 0  // Clean price and parse it
                     });
 
                     // Clear form after successful submission

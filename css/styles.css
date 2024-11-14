@@ -194,3 +194,16 @@ button:hover {
 }
 
 /* LOGIN ENDS */
+
+#import-section {
+    padding: 20px;
+    text-align: center;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+#import-section input[type="file"] {
+    margin: 10px;
+}

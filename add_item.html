@@ -16,14 +16,21 @@
     <section id="add-item">
         <h2>Agregar nueva prenda</h2>
         <form id="form-agregar">
+            <label for="idProducto">ID Producto:</label>
+            <input type="text" id="idProducto" name="idProducto" required>
+            
+            <label for="codigoCatalogo">Código Catálogo:</label>
+            <input type="text" id="codigoCatalogo" name="codigoCatalogo" required>
+
             <label for="nombre">Nombre:</label>
             <input type="text" id="nombre" name="nombre" required>
             
+            <label for="marca">Marca:</label>
+            <input type="text" id="marca" name="marca" required>
+
             <label for="categoria">Categoría:</label>
             <select id="categoria" name="categoria" required>
-                <option value="Hombre">Hombre</option>
-                <option value="Mujer">Mujer</option>
-                <option value="Niños">Niños</option>
+                <!-- Categories will be loaded dynamically -->
             </select>
 
             <label for="cantidad">Cantidad:</label>
@@ -31,6 +38,13 @@
 
             <label for="precio">Precio:</label>
             <input type="number" id="precio" name="precio" required>
+
+            <!-- New Fields -->
+            <label for="talle">Talle:</label>
+            <input type="text" id="talle" name="talle" required>
+
+            <label for="color">Color:</label>
+            <input type="text" id="color" name="color" required>
 
             <button type="submit">Agregar Prenda</button>
         </form>

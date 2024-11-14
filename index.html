@@ -30,7 +30,12 @@
         
         <div id="item-list" class="card-container"></div>
     </section>
-
+    <section id="import-section">
+        <h2>Importar Inventario</h2>
+        <input type="file" id="excel-file" accept=".xlsx, .xls" />
+        <button id="import-btn">Cargar Inventario</button>
+    </section>
+    
     <!-- Edit Form Modal -->
     <div id="edit-overlay" class="overlay hidden">
         <section id="edit-item" class="modal">
@@ -40,12 +45,23 @@
                 <label for="edit-nombre">Nombre:</label>
                 <input type="text" id="edit-nombre" name="nombre" required>
 
+                <label for="edit-codCatalogo">codCatalogo:</label>
+                <input type="text" id="edit-codCatalogo" name="codCatalogo" required>
+
                 <label for="edit-categoria">Categoría:</label>
-                <select id="edit-categoria" name="categoria" required>
+                <select id="edit-categoria" name="categoria">
                     <option value="Hombre">Hombre</option>
                     <option value="Mujer">Mujer</option>
                     <option value="Niños">Niños</option>
                 </select>
+                <label for="edit-marca">Talle:</label>
+                <input type="text" id="edit-marca" name="marca" required>
+
+                <label for="edit-talle">Talle:</label>
+                <input type="text" id="edit-talle" name="talle" required>
+
+                <label for="edit-color">Color:</label>
+                <input type="text" id="edit-color" name="color" required>
 
                 <label for="edit-cantidad">Cantidad:</label>
                 <input type="number" id="edit-cantidad" name="cantidad" required>
@@ -55,9 +71,12 @@
 
                 <button type="submit">Guardar Cambios</button>
                 <button type="button" id="cancel-edit">Cancelar</button>
+                <button class="delete-btn" data-id="${itemId}">Eliminar</button>
+
             </form>
         </section>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script type="module" src="js/app.js"></script> 
 </body>

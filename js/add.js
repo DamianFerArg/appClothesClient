@@ -4,13 +4,13 @@ import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.c
 
 // Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyBvluKIuZRR3CDlGeJSa6qYF0pAdgCpnBE",
-    authDomain: "proyectclothes-b6e88.firebaseapp.com",
-    projectId: "proyectclothes-b6e88",
-    storageBucket: "proyectclothes-b6e88.appspot.com",
-    messagingSenderId: "973366577223",
-    appId: "1:973366577223:web:66403424635d1300de4962",
-    measurementId: "G-E7SX5N778J"
+    apiKey: process.env.FIREBASE_API_KEY,
+    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.FIREBASE_PROJECT_ID,
+    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.FIREBASE_APP_ID,
+    measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
 // Initialize Firebase

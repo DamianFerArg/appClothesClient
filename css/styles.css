@@ -1,209 +1,114 @@
+/* General Reset */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
     color: #333;
 }
 
-header {
-    background: #38b6ff;
-    color: white;
-    padding: 10px 0;
-    text-align: center;
-}
-
-h2 {
-    margin-top: 20px;
-}
-
-form {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-    display: block;
-    margin: 10px 0 5px;
-}
-
-input{
-    width: 70%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-
-}
-
- select, button {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-button {
-    background: #38b6ff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #45a049;
-}
-
-#item-list {
-    list-style: none;
-    padding: 0;
-}
-
-#item-list li {
-    background: white;
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-}
-
-/* General Styling */
-
-
-#inventory {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-.card-container {
+/* Header Styles */
+.header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background-color: #38b6ff;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
 }
 
-/* Card Styling */
-.card {
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    width: 250px;
-    text-align: center;
-}
-
-.card h3 {
-    margin: 0;
-    font-size: 1.2em;
-}
-
-.card p {
-    margin: 10px 0;
-}
-
-.card button {
-    margin-top: 10px;
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: #fff;
+.header .btn-primary {
+    background-color: white;
+    color: #38b6ff;
     border: none;
-    border-radius: 4px;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
     cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
 }
 
-.card button:hover {
-    background-color: #0056b3;
+.header .btn-primary:hover {
+    background-color: #38b6ff;
+    color: white;
 }
-/* Overlay for edit modal */
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
+
+/* Inventory Section */
+.inventory-section {
+    padding: 2rem;
+}
+
+.filter-bar {
     display: flex;
     align-items: center;
-    justify-content: center;
-    z-index: 10;
+    margin-bottom: 1.5rem;
 }
 
-.modal {
-    background: white;
-    padding: 20px;
+.dropdown {
+    padding: 0.5rem;
+    font-size: 1rem;
     border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ccc;
 }
 
-/* Hide modal initially */
-.hidden {
-    display: none;
-}
-
-/* Card Styling Adjustments */
+/* Cards */
 .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
 }
 
 .card {
-    background: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    width: 250px;
-    text-align: center;
-}
-
-/* Item Image */
-.item-image {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    margin-bottom: 10px;
-}
-
-/* LOGIN */
-#login-section {
-    max-width: 400px;
-    margin: 100px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center; /* Center content */
-
-}
-
-.error-message {
-    color: red;
-    margin-top: 10px;
-    display: none;
-}
-
-.login-logo {
-    width: 200px;      /* Adjust size as needed */
-    height: 200px;
-    border-radius: 50%; /* Makes the image circular */
-    margin-bottom: 20px;
-    object-fit: cover;  /* Ensures the image scales properly */
-}
-
-/* LOGIN ENDS */
-
-#import-section {
-    padding: 20px;
-    text-align: center;
-    margin-top: 20px;
+    font-family: 'Montserrat', sans-serif;
+    background: white;
     border: 1px solid #ddd;
-    background-color: #f9f9f9;
-    border-radius: 8px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
 }
 
-#import-section input[type="file"] {
-    margin: 10px;
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img.product-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+.product-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.product-price, .product-quantity {
+    margin-bottom: 0.5rem;
+}
+
+.btn {
+    font-family: 'Montserrat', sans-serif;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #38b6ff;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #38b6ff;
 }

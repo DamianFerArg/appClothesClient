@@ -5,77 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario de Ropa</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <script>
         // Redirect to login page if the user is not logged in
-        if (sessionStorage.getItem("isLoggedIn") !== "true") {
-            window.location.href = "login.html";
-        }
+        // if (sessionStorage.getItem("isLoggedIn") !== "true") {
+        //     window.location.href = "login.html";
+        // }
     </script>
 </head>
 <body>
-    <header>
-        <h1>Gestión de Inventario de Ropa</h1>
-        <a href="add_item.html">Agregar</a>
+    <header class="header">
+        <div class="logo">
+            <h1>Inventario de Ropa</h1>
+        </div>
+        <nav>
+            <a href="add_item.html" class="btn btn-primary">Agregar Prenda</a>
+        </nav>
     </header>
+    
 
-    <section id="inventory">
+    <section id="inventory" class="inventory-section">
         <h2>Inventario Actual</h2>
-        <label for="categoria-select">Seleccionar Categoría:</label>
-        <select id="categoria-select">
-            <option value="all">Todos</option>
-            <option value="Hombre">Hombre</option>
-            <option value="Mujer">Mujer</option>
-            <option value="Niños">Niños</option>
-        </select>
-        
-        <div id="item-list" class="card-container"></div>
-    </section>
-    <section id="import-section">
-        <h2>Importar Inventario</h2>
-        <input type="file" id="excel-file" accept=".xlsx, .xls" />
-        <button id="import-btn">Cargar Inventario</button>
+        <div class="filter-bar">
+            <label for="categoria-select">Categoría:</label>
+            <select id="categoria-select" class="dropdown">
+                <option value="all">Todos</option>
+                <option value="Hombre">Hombre</option>
+                <option value="Mujer">Mujer</option>
+                <option value="Niños">Niños</option>
+            </select>
+        </div>
+        <div id="item-list" class="card-container">
+            
+        </div>
     </section>
     
+
+    
     <!-- Edit Form Modal -->
-    <div id="edit-overlay" class="overlay hidden">
-        <section id="edit-item" class="modal">
-            <h2>Editar Prenda</h2>
-            <form id="form-editar">
-                <input type="hidden" id="edit-id">
-                <label for="edit-nombre">Nombre:</label>
-                <input type="text" id="edit-nombre" name="nombre" required>
-
-                <label for="edit-codCatalogo">codCatalogo:</label>
-                <input type="text" id="edit-codCatalogo" name="codCatalogo">
-
-                <label for="edit-categoria">Categoría:</label>
-                <select id="edit-categoria" name="categoria">
-                    <option value="Hombre">Hombre</option>
-                    <option value="Mujer">Mujer</option>
-                    <option value="Niños">Niños</option>
-                </select>
-                <label for="edit-marca">Marca:</label>
-                <input type="text" id="edit-marca" name="marca" required>
-
-                <label for="edit-talle">Talle:</label>
-                <input type="text" id="edit-talle" name="talle" required>
-
-                <label for="edit-color">Color:</label>
-                <input type="text" id="edit-color" name="color" required>
-
-                <label for="edit-cantidad">Cantidad:</label>
-                <input type="number" id="edit-cantidad" name="cantidad" required>
-
-                <label for="edit-precio">Precio:</label>
-                <input type="number" id="edit-precio" name="precio" required>
-
-                <button type="submit">Guardar Cambios</button>
-                <button type="button" id="cancel-edit">Cancelar</button>
-                <button class="delete-btn" data-id="${itemId}">Eliminar</button>
-
-            </form>
-        </section>
-    </div>
+   
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
     <script type="module" src="js/app.js"></script> 

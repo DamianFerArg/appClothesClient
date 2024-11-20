@@ -9,44 +9,39 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 //------------------------------------------------------------------------------------------LOAD CATEGORIES & ITEMS
-async function populateEditCategories() {
-    try {
-        const categorySet = new Set();
+// async function populateEditCategories() {
+//     try {
+//         const categorySet = new Set();
 
-        // Fetch all items from Firestore to extract unique categories
-        const querySnapshot = await getDocs(collection(db, "inventario"));
-        querySnapshot.forEach((doc) => {
-            const item = doc.data();
-            if (item.categoria) {
-                categorySet.add(item.categoria); // Add category to the Set
-            }
-        });
+//         // Fetch all items from Firestore to extract unique categories
+//         const querySnapshot = await getDocs(collection(db, "inventario"));
+//         querySnapshot.forEach((doc) => {
+//             const item = doc.data();
+//             if (item.categoria) {
+//                 categorySet.add(item.categoria); // Add category to the Set
+//             }
+//         });
 
-        // Select the edit-categoria dropdown
-        const editCategoriaSelect = document.getElementById("edit-categoria");
+//         // Select the edit-categoria dropdown
+//         const editCategoriaSelect = document.getElementById("edit-categoria");
 
-        // Clear any existing options
-        editCategoriaSelect.innerHTML = "";
+//         // Clear any existing options
+//         editCategoriaSelect.innerHTML = "";
 
-        // Add options dynamically
-        categorySet.forEach((category) => {
-            const option = document.createElement("option");
-            option.value = category;
-            option.textContent = category;
-            editCategoriaSelect.appendChild(option);
-        });
-    } catch (error) {
-        console.error("Error populating categories in edit form:", error);
-    }
-}
+//         // Add options dynamically
+//         categorySet.forEach((category) => {
+//             const option = document.createElement("option");
+//             option.value = category;
+//             option.textContent = category;
+//             editCategoriaSelect.appendChild(option);
+//         });
+//     } catch (error) {
+//         console.error("Error populating categories in edit form:", error);
+//     }
+// }
 
 // Call this function when the edit modal opens
-document.addEventListener("DOMContentLoaded", () => {
-    const editOverlay = document.getElementById("edit-overlay");
 
-    // Add an event listener to trigger category population when the overlay is shown
-    editOverlay.addEventListener("show", populateEditCategories);
-});
 // Function to load categories dynamically from Firestore
 function loadCategories() {
     getDocs(collection(db, "inventario")).then((querySnapshot) => {
@@ -112,19 +107,38 @@ function loadItems() {
                 <p>Color: ${itemData.color}</p>
                 <p>Cantidad: ${itemData.cantidad}</p>
                 <p>Precio: ${itemData.precio} pesos</p>
-                <button class="edit-btn" data-id="${itemId}">Editar</button>
+                <button class="btn me-interesa-btn" data-item='${JSON.stringify(itemData)}'>Me interesa</button>
             `;
 
             itemList.appendChild(itemCard);
         });
 
-        // Attach event listeners to edit buttons
-        document.querySelectorAll('.edit-btn').forEach(btn => {
-            btn.addEventListener('click', openEditForm);
+        // Add event listeners for "Me interesa" buttons
+        document.querySelectorAll('.me-interesa-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const item = JSON.parse(e.target.getAttribute('data-item'));
+                sendWhatsAppMessage(item);
+            });
         });
-    }).catch(error => {
-        console.error("Error fetching Firestore data: ", error);
     });
+}
+
+// Function to send WhatsApp message
+function sendWhatsAppMessage(item) {
+    const phoneNumber = "5491130465438"; // Replace with your WhatsApp number
+    const message = encodeURIComponent(
+        `Hola! Me interesa el siguiente producto:\n\n` +
+        `Nombre: ${item.nombre}\n` +
+        `CodCatalogo: ${item.codigoCatalogo}\n` +
+        `Categoría: ${item.categoria}\n` +
+        `Marca: ${item.marca}\n` +
+        `Talle: ${item.talle}\n` +
+        `Color: ${item.color}\n` +
+        `Precio: ${item.precio} pesos`
+    );
+
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
 }
 
 //------------------------------------------------------------------------------------------EDITAR
@@ -174,50 +188,12 @@ function openEditForm(event) {
 
 
 // Handle form submission for editing an item
-document.getElementById('form-editar').addEventListener('submit', async function(event) {
-    event.preventDefault();
 
-    const itemId = document.getElementById('edit-id').value;
-    const updatedData = {
-        nombre: document.getElementById('edit-codCatalogo').value,
-        nombre: document.getElementById('edit-nombre').value,
-        categoria: document.getElementById('edit-categoria').value,
-        marca: document.getElementById('edit-marca').value,
-        cantidad: parseInt(document.getElementById('edit-cantidad').value),
-        precio: parseFloat(document.getElementById('edit-precio').value),
-        talle: document.getElementById('edit-talle').value,  // Add talle
-        color: document.getElementById('edit-color').value   // Add color
-    };
-
-    // Log data before update for debugging
-    console.log("Updating item with ID:", itemId, "with data:", updatedData);
-
-    try {
-        await updateDoc(doc(db, "inventario", itemId), updatedData);
-
-        alert('Prenda actualizada exitosamente!');
-
-        // Log data after successful update
-        console.log("Updated item:", itemId);
-
-        // Delay reloading to ensure Firestore processes the update
-        setTimeout(() => {
-            loadItems();
-            document.getElementById('edit-item').classList.add('hidden');
-            document.getElementById('edit-overlay').classList.add('hidden');
-        }, 500);
-
-    } catch (error) {
-        console.error("Error updating document: ", error);
-    }
-});
 
 
 
 // Cancel editing
-document.getElementById('cancel-edit').addEventListener('click', () => {
-    document.getElementById('edit-overlay').classList.add('hidden');
-});
+
 
 // Filter items based on selected category
 document.getElementById('categoria-select').addEventListener('change', function() {
@@ -228,34 +204,11 @@ document.getElementById('categoria-select').addEventListener('change', function(
     });
 });
 //---------------------------------------------------------------------------BORRAR
-async function deleteItem(itemId) {
-    if (confirm("¿Estás seguro de que deseas eliminar este ítem?")) {
-        try {
-            await deleteDoc(doc(db, "inventario", itemId));
-            alert("Ítem eliminado exitosamente.");
-            loadItems(); // Refresh the inventory list after deletion
-            document.getElementById('edit-item').classList.add('hidden'); // Hide the modal after deletion
-            document.getElementById('edit-overlay').classList.add('hidden'); // Hide the overlay
-        } catch (error) {
-            console.error("Error al eliminar el ítem: ", error);
-            alert("Ocurrió un error al eliminar el ítem.");
-        }
-    }
-}
 
-// Attach the delete button listener
-document.querySelector('.delete-btn').addEventListener('click', (event) => {
-    const itemId = event.target.getAttribute('data-id');
-    deleteItem(itemId);
-});
 
-document.getElementById('import-btn').addEventListener('click', importData);
 
 // Delete handler function to call deleteItem with item ID
-function handleDelete(event) {
-    const itemId = event.target.getAttribute('data-id');
-    deleteItem(itemId);
-}
+
 //-----------------------------------------------------------------------------------IMPORTAR
 export async function importData() {
     const fileInput = document.getElementById('excel-file');

@@ -96,9 +96,14 @@ function loadItems() {
             itemCard.className = 'card';
             itemCard.dataset.category = itemData.categoria; // Category for filtering
 
-            // Update the item card to display new fields
+            // Updated to use lazy loading and proper image handling
             itemCard.innerHTML = `
-            <img src="${itemData.imageUrl || 'https://via.placeholder.com/150'}" alt="${itemData.nombre}" class="item-image">
+                <img 
+                    src="${itemData.imageUrl || 'https://via.placeholder.com/150'}" 
+                    alt="${itemData.nombre}" 
+                    class="item-image" 
+                    loading="lazy"
+                >
                 <h3>${itemData.nombre}</h3>
                 <p>CodCatalogo: ${itemData.codigoCatalogo}</p>
                 <p>Categoría: ${itemData.categoria}</p>

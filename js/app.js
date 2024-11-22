@@ -98,7 +98,7 @@ function loadItems() {
 
             // Update the item card to display new fields
             itemCard.innerHTML = `
-                <img src="https://via.placeholder.com/150" alt="${itemData.nombre}" class="item-image">
+            <img src="${itemData.imageUrl || 'https://via.placeholder.com/150'}" alt="${itemData.nombre}" class="item-image">
                 <h3>${itemData.nombre}</h3>
                 <p>CodCatalogo: ${itemData.codigoCatalogo}</p>
                 <p>Categoría: ${itemData.categoria}</p>

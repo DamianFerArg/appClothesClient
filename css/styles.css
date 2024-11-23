@@ -5,6 +5,7 @@ body {
     padding: 0;
     background-color: #f9f9f9;
     color: #333;
+    text-transform: uppercase;
 }
 
 /* Header Styles */
@@ -17,6 +18,38 @@ body {
     color: white;
     font-family: 'Montserrat', sans-serif;
 }
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Montserrat', sans-serif; /* Use a clean, modern font */
+    font-size: 1.5rem; /* Adjust size for a small logo */
+    font-weight: 700; /* Bold for prominence */
+    color: #333; /* Neutral text color */
+    background-color: #f4f4f4; /* Subtle background color */
+    border-radius: 50%; /* Circular shape */
+    width: 60px; /* Small, consistent size */
+    height: 60px;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+    cursor: pointer; /* Pointer cursor for interactivity */
+    overflow: hidden; /* Prevent overflow if content exceeds bounds */
+}
+
+.logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensure logo image fits within bounds */
+    border-radius: 50%; /* Matches the circular container */
+}
+
+.logo:hover {
+    background-color: #e0e0e0; /* Slight hover effect */
+    transform: scale(1.1); /* Subtle zoom */
+    transition: all 0.3s ease; /* Smooth hover transition */
+}
+
 
 .header .btn-primary {
     background-color: white;
@@ -50,9 +83,11 @@ body {
     font-size: 1rem;
     border-radius: 5px;
     border: 1px solid #ccc;
+    text-transform: uppercase;
+
 }
 
-/* Cards */
+/* CARDS */
 .card-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -94,7 +129,8 @@ body {
     margin-bottom: 0.5rem;
 }
 
-.btn {
+.btn, .me-interesa-btn {
+    background-color: #38b6ff;
     font-family: 'Montserrat', sans-serif;
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -102,6 +138,7 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    color: white;
 }
 
 .btn-secondary {
@@ -112,3 +149,83 @@ body {
 .btn-secondary:hover {
     background-color: #38b6ff;
 }
+
+.item-image {
+    width: 150px;
+    height: 150px;
+    object-fit: cover; /* Ensures image scales properly */
+    border-radius: 5px; /* Optional: Adds rounded corners */
+}
+
+/* CARROUSEL */
+
+.carousel-section {
+    margin: 20px 0;
+    overflow: hidden; /* Prevent content overflow */
+}
+
+.swiper {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* Ensure swiper content stays within the viewport */
+    padding: 0 10px; /* Add some padding to prevent edge clipping */
+    box-sizing: border-box; /* Include padding in width calculations */
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    height: auto;
+    max-width: 100%; /* Ensure the slide doesn't exceed the screen width */
+    box-sizing: border-box; /* Include padding in width calculations */
+}
+
+.swiper-slide img {
+    max-width: 90%; /* Keep the image within the container */
+    max-height: 400px; /* Maintain a reasonable height */
+    object-fit: contain; /* Prevent cropping */
+    border-radius: 8px;
+    display: block;
+    margin: auto;
+    box-sizing: border-box; /* Include padding in size calculations */
+}
+
+h2{
+    text-align: center;
+}
+
+
+/* CARROUSEL END */
+/* FOOTER */
+.footer {
+    background-color: #333; /* Dark background for contrast */
+    color: #f9f9f9; /* Light text color for readability */
+    text-align: center;
+    padding: 20px 10px; /* Comfortable padding */
+    font-family: 'Montserrat', sans-serif; /* Clean, modern font */
+    font-size: 0.9rem; /* Slightly smaller text */
+    border-top: 3px solid #38b6ff; /* Accent border at the top */
+}
+
+.footer-content p {
+    margin: 5px 0; /* Reduce margin for compact spacing */
+}
+
+.footer-content a {
+    color: #38b6ff; /* Accent color for links */
+    text-decoration: none; /* No underline */
+}
+
+.footer-content a:hover {
+    text-decoration: underline; /* Underline on hover for clarity */
+    color: #38b6ff; /* Lighter shade on hover */
+}
+/* FOOTER END */

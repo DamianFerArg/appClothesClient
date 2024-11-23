@@ -1,6 +1,6 @@
 // Import Firebase SDKs and Firestore
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, getDoc,  query, orderBy, limit  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 import { firebaseConfig } from "./config.js";
 
@@ -208,10 +208,72 @@ document.getElementById('categoria-select').addEventListener('change', function(
         item.style.display = (selectedCategory === 'all' || item.dataset.category === selectedCategory) ? 'block' : 'none';
     });
 });
-//---------------------------------------------------------------------------BORRAR
+//---------------------------------------------------------------------------CARROUSEL
 
+async function loadLatestItems() {
+    try {
+        // Create a query for the latest 5 items
+        const latestItemsQuery = query(
+            collection(db, "inventario"),
+            orderBy("createdAt", "desc"), // Order by 'createdAt' field in descending order
+            limit(5) // Limit to 5 items
+        );
 
+        // Fetch the data
+        const querySnapshot = await getDocs(latestItemsQuery);
 
+        // Find the Swiper wrapper in the DOM
+        const swiperWrapper = document.querySelector('.swiper-wrapper');
+        swiperWrapper.innerHTML = ''; // Clear existing slides
+
+        // Process the documents
+        querySnapshot.forEach((docSnapshot) => {
+            const itemData = docSnapshot.data();
+
+            // Create a new Swiper slide
+            const slide = document.createElement('div');
+            slide.className = 'swiper-slide';
+
+            slide.innerHTML = `
+                <img src="${itemData.imageUrl || 'https://via.placeholder.com/150'}" alt="${itemData.nombre}">
+                <h4>${itemData.nombre}</h4>
+                <p>Precio: ${itemData.precio} pesos</p>
+                
+                <button class="btn me-interesa-btn" data-item='${JSON.stringify(itemData)}'>Me interesa</button>
+            `;
+
+            // Append the slide to the Swiper wrapper
+            swiperWrapper.appendChild(slide);
+        });
+
+        // Initialize SwiperJS
+        new Swiper('.swiper', {
+            loop: true,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            slidesPerView: 1,
+            spaceBetween: 10,
+        });
+    } catch (error) {
+        console.error("Error loading latest items:", error);
+    }
+
+    document.querySelectorAll('.me-interesa-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const item = JSON.parse(e.target.getAttribute('data-item'));
+            sendWhatsAppMessage(item);
+        });
+    });
+}
+
+// Call the function after DOM is ready
+document.addEventListener('DOMContentLoaded', loadLatestItems);
 // Delete handler function to call deleteItem with item ID
 
 //-----------------------------------------------------------------------------------IMPORTAR

@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inventario de Ropa</title>
     <link rel="stylesheet" href="css/styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+
     <script>
         // Redirect to login page if the user is not logged in
         // if (sessionStorage.getItem("isLoggedIn") !== "true") {
@@ -13,17 +17,33 @@
         // }
     </script>
 </head>
+
 <body>
     <header class="header">
-        <div class="logo">
-            <h1>Inventario de Ropa</h1>
+        <div class="title">
+            <h1>CELESTE CIELO</h1>
         </div>
         <nav>
-            <a href="add_item.html" class="btn btn-primary"></a>
+            <div class="logo">
+                <img src="/img/Planet.png" alt="Logo">
+            </div>
         </nav>
     </header>
-    
 
+    <section id="latest-items" class="carousel-section">
+        <h2>Últimos Productos</h2>
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                <!-- Carousel slides will be dynamically generated here -->
+            </div>
+            <!-- Optional navigation buttons -->
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <!-- Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+    </section>
+    
     <section id="inventory" class="inventory-section">
         <h2>Inventario Actual</h2>
         <div class="filter-bar">
@@ -36,16 +56,28 @@
             </select>
         </div>
         <div id="item-list" class="card-container">
-            
+
         </div>
     </section>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p><strong>Dirección:</strong> Calle Falsa 123, Ciudad, País</p>
+            <p><strong>Horario:</strong> Lunes a Viernes: 9:00 AM - 6:00 PM <br> Sabados: 9:00 AM - 6:00 PM</p>
+            <p><strong>Teléfono:</strong> +54 11 1234 5678</p>
+            <p>
+                <strong>Instagram:</strong> 
+                <a href="https://www.instagram.com/celestecieloballester" target="_blank">@celestecieloballester</a>
+            </p>
+        </div>
+    </footer>
     
 
-    
     <!-- Edit Form Modal -->
-   
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
-    <script type="module" src="js/app.js"></script> 
+    <script type="module" src="js/app.js"></script>
 </body>
+
 </html>

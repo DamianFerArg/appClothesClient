@@ -82,55 +82,273 @@ document.getElementById('categoria-select').addEventListener('change', function(
         item.style.display = (selectedCategory === 'all' || item.dataset.category === selectedCategory) ? 'block' : 'none';
     });
 });
-// Function to load items from Firestore and display them
-function loadItems() {
+
+
+let currentPage = 1;
+const itemsPerPage = 25;
+
+function loadItems(page = 1) {
     getDocs(collection(db, "inventario")).then((querySnapshot) => {
         const itemList = document.getElementById('item-list');
         itemList.innerHTML = ''; // Clear existing items
 
+        // Group items by name (or another attribute) to handle talles
+        const groupedItems = {};
         querySnapshot.forEach((docSnapshot) => {
             const itemData = docSnapshot.data();
             const itemId = docSnapshot.id;
 
+            const groupKey = itemData.nombre; // Group by 'nombre'
+            if (!groupedItems[groupKey]) {
+                groupedItems[groupKey] = [];
+            }
+            groupedItems[groupKey].push({ ...itemData, id: itemId });
+        });
+
+        const allItems = Object.values(groupedItems); // Convert groupedItems to an array
+        const totalPages = Math.ceil(allItems.length / itemsPerPage);
+
+        // Get items for the current page
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = page * itemsPerPage;
+        const itemsToDisplay = allItems.slice(startIndex, endIndex);
+
+        // Create cards for each group in the current page
+        itemsToDisplay.forEach((itemsInGroup) => {
+            const firstItem = itemsInGroup[0]; // Use the first item as a base for the card
             const itemCard = document.createElement('div');
             itemCard.className = 'card';
-            itemCard.dataset.category = itemData.categoria; // Category for filtering
+            itemCard.dataset.category = firstItem.categoria;
 
-            // Updated to use lazy loading and proper image handling
+            // Add card content
             itemCard.innerHTML = `
                 <img 
-                    src="${itemData.imageUrl || 'https://via.placeholder.com/150'}" 
-                    alt="${itemData.nombre}" 
+                    src="${firstItem.imageUrl || 'https://via.placeholder.com/150'}" 
+                    alt="${firstItem.nombre}" 
                     class="item-image" 
-                    loading="lazy"
+                    id="item-image-${firstItem.id}" 
                 >
-                <h3>${itemData.nombre}</h3>
-                <p>CodCatalogo: ${itemData.codigoCatalogo}</p>
-                <p>Categoría: ${itemData.categoria}</p>
-                <p>Marca: ${itemData.marca}</p>
-                <p>Talle: ${itemData.talle}</p>
-                <p>Color: ${itemData.color}</p>
-                <p>Cantidad: ${itemData.cantidad}</p>
-                <p>Precio: ${itemData.precio} pesos</p>
-                <button class="btn me-interesa-btn" data-item='${JSON.stringify(itemData)}'>Me interesa</button>
+                <h3>${firstItem.nombre}</h3>
+                <p>Categoría: ${firstItem.categoria}</p>
+                <div class="talle-container"></div>
+                <p>Color: ${firstItem.color}</p>
+                <p class="price" id="precio-${firstItem.id}">Precio: ${firstItem.precio} pesos</p>
+                <button class="btn me-interesa-btn" data-item='${JSON.stringify(firstItem)}'>Me interesa</button>
+
+                <!-- Modal for Image Enlargement -->
+                <div class="modal" id="modal-${firstItem.id}">
+                    <span class="close-btn" id="close-modal-${firstItem.id}">&times;</span>
+                    <img class="modal-content" id="modal-image-${firstItem.id}" src="" alt="">
+                </div>
             `;
+
+            // Add talle buttons if there are multiple talles
+            const talleContainer = itemCard.querySelector('.talle-container');
+            if (itemsInGroup.length > 1) {
+                itemsInGroup.forEach((item) => {
+                    const talleButton = document.createElement('button');
+                    talleButton.textContent = item.talle;
+                    talleButton.className = 'btn talle-btn';
+                    talleButton.dataset.id = item.id;
+                    talleButton.dataset.talle = item.talle;
+
+                    // Add click event to update details on selection
+                    talleButton.addEventListener('click', function () {
+                        // Update the selected talle button's appearance
+                        itemCard.querySelectorAll('.talle-btn').forEach((btn) => {
+                            btn.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+
+                        // Update card details with the selected talle
+                        const selectedItem = itemsInGroup.find((i) => i.id === item.id);
+                        updateCardWithSelectedTalle(itemCard, selectedItem);
+                    });
+
+                    talleContainer.appendChild(talleButton);
+                });
+            } else {
+                // If only one talle exists, hide the talle container
+                talleContainer.style.display = 'none';
+            }
 
             itemList.appendChild(itemCard);
         });
 
         // Add event listeners for "Me interesa" buttons
-        document.querySelectorAll('.me-interesa-btn').forEach(button => {
+        document.querySelectorAll('.me-interesa-btn').forEach((button) => {
             button.addEventListener('click', (e) => {
                 const item = JSON.parse(e.target.getAttribute('data-item'));
                 sendWhatsAppMessage(item);
             });
         });
+
+        // Update pagination controls
+        updatePaginationControls(totalPages, page);
     });
 }
 
+function updatePaginationControls(totalPages, currentPage) {
+    const paginationContainer = document.getElementById('pagination');
+    paginationContainer.innerHTML = ''; // Clear existing controls
+
+    for (let i = 1; i <= totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.textContent = i;
+        pageButton.className = 'pagination-btn';
+        if (i === currentPage) pageButton.classList.add('active');
+
+        pageButton.addEventListener('click', () => {
+            currentPage = i;
+            loadItems(currentPage);
+        });
+
+        paginationContainer.appendChild(pageButton);
+    }
+}
+
+
+// Function to load items from Firestore and display them
+// function loadItems() {
+//     getDocs(collection(db, "inventario")).then((querySnapshot) => {
+//         const itemList = document.getElementById('item-list');
+//         itemList.innerHTML = ''; // Clear existing items
+
+//         // Group items by name (or another attribute) to handle talles
+//         const groupedItems = {};
+//         querySnapshot.forEach((docSnapshot) => {
+//             const itemData = docSnapshot.data();
+//             const itemId = docSnapshot.id;
+
+//             const groupKey = itemData.nombre; // Group by 'nombre'
+//             if (!groupedItems[groupKey]) {
+//                 groupedItems[groupKey] = [];
+//             }
+//             groupedItems[groupKey].push({ ...itemData, id: itemId });
+//         });
+
+//         // Create cards for each group
+//         Object.values(groupedItems).forEach((itemsInGroup) => {
+//             const firstItem = itemsInGroup[0]; // Use the first item as a base for the card
+//             const itemCard = document.createElement('div');
+//             itemCard.className = 'card';
+//             itemCard.dataset.category = firstItem.categoria;
+
+//             // Add card content
+//             itemCard.innerHTML = `
+//                 <img 
+//                     src="${firstItem.imageUrl || 'https://via.placeholder.com/150'}" 
+//                     alt="${firstItem.nombre}" 
+//                     class="item-image" 
+//                     id="item-image-${firstItem.id}" 
+//                 >
+//                 <h3>${firstItem.nombre}</h3>
+//                 <p>Categoría: ${firstItem.categoria}</p>
+//                 <div class="talle-container"></div>
+//                 <p>Color: ${firstItem.color}</p>
+//                 <p class="price" id="precio-${firstItem.id}">Precio: ${firstItem.precio} pesos</p>
+//                 <button class="btn me-interesa-btn" data-item='${JSON.stringify(firstItem)}'>Me interesa</button>
+
+
+//                 <!-- Modal for Image Enlargement -->
+//                 <div class="modal" id="modal-${firstItem.id}">
+//                     <span class="close-btn" id="close-modal-${firstItem.id}">&times;</span>
+//                     <img class="modal-content" id="modal-image-${firstItem.id}" src="" alt="">
+//                 </div>
+//             `;
+
+//             // Add talle buttons if there are multiple talles
+//             const talleContainer = itemCard.querySelector('.talle-container');
+//             if (itemsInGroup.length > 1) {
+//                 itemsInGroup.forEach((item) => {
+//                     const talleButton = document.createElement('button');
+//                     talleButton.textContent = item.talle;
+//                     talleButton.className = 'btn talle-btn';
+//                     talleButton.dataset.id = item.id;
+//                     talleButton.dataset.talle = item.talle;
+
+//                     // Add click event to update details on selection
+//                     talleButton.addEventListener('click', function () {
+//                         // Update the selected talle button's appearance
+//                         itemCard.querySelectorAll('.talle-btn').forEach(btn => {
+//                             btn.classList.remove('selected');
+//                         });
+//                         this.classList.add('selected');
+
+//                         // Update card details with the selected talle
+//                         const selectedItem = itemsInGroup.find(i => i.id === item.id);
+//                         updateCardWithSelectedTalle(itemCard, selectedItem);
+//                     });
+
+//                     talleContainer.appendChild(talleButton);
+//                 });
+//             } else {
+//                 // If only one talle exists, hide the talle container
+//                 talleContainer.style.display = 'none';
+//             }
+
+//             itemList.appendChild(itemCard);
+//         });
+
+//         // Add event listeners for "Me interesa" buttons
+//         document.querySelectorAll('.me-interesa-btn').forEach(button => {
+//             button.addEventListener('click', (e) => {
+//                 const item = JSON.parse(e.target.getAttribute('data-item'));
+//                 sendWhatsAppMessage(item);
+//             });
+//         });
+//     });
+// }
+
+
+function updateCardWithSelectedTalle(card, selectedItem) {
+    // Show a loading spinner or placeholder
+    const imageElement = card.querySelector('.item-image');
+    if (!imageElement) {
+        console.error("Image element not found in the card.");
+        return;
+    }
+
+    const spinner = document.createElement('div');
+    spinner.className = 'spinner';
+    card.insertBefore(spinner, imageElement);
+
+    // Update the details after a small delay (simulating loading time)
+    setTimeout(() => {
+        // Update name if the element exists
+        const nameElement = card.querySelector('h3');
+        if (nameElement) {
+            nameElement.textContent = selectedItem.nombre;
+        }
+
+        // Update price if the element exists
+        const priceElement = card.querySelector(`[id^="precio-"]`); // Find the price element by partial ID
+        if (priceElement) {
+            priceElement.id = `precio-${selectedItem.id}`; // Update the ID to match the selected item's ID
+            priceElement.textContent = `Precio: ${selectedItem.precio} pesos`;
+        } else {
+            console.error(`Price element not found for item ID: ${selectedItem.id}`);
+            console.log("Card HTML:", card.innerHTML); // Debugging log
+        }
+
+        // Update image
+        if (imageElement) {
+            imageElement.src = selectedItem.imageUrl || 'https://via.placeholder.com/150';
+        }
+
+        // Remove the spinner
+        spinner.remove();
+    }, 500);
+}
+
+
+
+
+
+
 // Function to send WhatsApp message
 function sendWhatsAppMessage(item) {
-    const phoneNumber = "5491130465438"; // Replace with your WhatsApp number
+    const phoneNumber = "5491168759154"; // Replace with your WhatsApp number
     const message = encodeURIComponent(
         `Hola! Me interesa el siguiente producto:\n\n` +
         `Nombre: ${item.nombre}\n` +

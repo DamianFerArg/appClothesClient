@@ -346,7 +346,6 @@ function updateCardWithSelectedTalle(card, selectedItem) {
 
 
 
-// Function to send WhatsApp message
 function sendWhatsAppMessage(item) {
     const phoneNumber = "5491168759154"; // Replace with your WhatsApp number
     const message = encodeURIComponent(
@@ -357,13 +356,13 @@ function sendWhatsAppMessage(item) {
         `Marca: ${item.marca}\n` +
         `Talle: ${item.talle}\n` +
         `Color: ${item.color}\n` +
-        `Precio: ${item.precio} pesos`
+        `Precio: ${item.precio} pesos\n\n` +
+        `Mira la imagen del producto: ${item.imageUrl}` // Add the image URL here
     );
 
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
 }
-
 //------------------------------------------------------------------------------------------EDITAR
 
 // Open the edit form with the item’s details

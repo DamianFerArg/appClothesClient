@@ -740,3 +740,83 @@ select option {
     font-size: 14px;
     text-transform: uppercase;
 }
+/* Make Header Responsive */
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        height: auto;
+        padding: 0.5rem;
+        text-align: center;
+    }
+
+    .header ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .header ul select {
+        font-size: 0.8rem;
+    }
+
+    .logo img {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Make Carousel Responsive */
+@media (max-width: 768px) {
+    .carousel-section {
+        height: auto; /* Allow it to scale */
+    }
+
+    .carousel-slide img {
+        height: auto;
+        max-width: 100%;
+    }
+}
+
+/* Adjust Inventory Display */
+@media (max-width: 768px) {
+    .inventory-section {
+        padding: 1rem;
+    }
+
+    .card-container {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .item-image {
+        width: 100%;
+        height: auto;
+    }
+}
+
+/* Make Footer Responsive */
+@media (max-width: 768px) {
+    .footer {
+        text-align: center;
+        font-size: 0.8rem;
+    }
+
+    .footer-content p {
+        margin-bottom: 5px;
+    }
+}
+
+/* Adjust Image Section */
+@media (max-width: 768px) {
+    .image-section {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .image-item {
+        width: 100%;
+        height: auto;
+    }
+}

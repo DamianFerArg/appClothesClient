@@ -1,93 +1,120 @@
 // Import Firebase SDKs and Firestore
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc, addDoc, getDoc,  query, orderBy, limit  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+import { getFirestore, collection, getDocs, where, doc, updateDoc, deleteDoc, addDoc, getDoc,  query, orderBy, limit  } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
 import { firebaseConfig } from "./config.js";
 
 // Initialize Firebase and Firestore
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const storage = getStorage(app);
 //------------------------------------------------------------------------------------------LOAD CATEGORIES & ITEMS
-// async function populateEditCategories() {
-//     try {
-//         const categorySet = new Set();
-
-//         // Fetch all items from Firestore to extract unique categories
-//         const querySnapshot = await getDocs(collection(db, "inventario"));
-//         querySnapshot.forEach((doc) => {
-//             const item = doc.data();
-//             if (item.categoria) {
-//                 categorySet.add(item.categoria); // Add category to the Set
-//             }
-//         });
-
-//         // Select the edit-categoria dropdown
-//         const editCategoriaSelect = document.getElementById("edit-categoria");
-
-//         // Clear any existing options
-//         editCategoriaSelect.innerHTML = "";
-
-//         // Add options dynamically
-//         categorySet.forEach((category) => {
-//             const option = document.createElement("option");
-//             option.value = category;
-//             option.textContent = category;
-//             editCategoriaSelect.appendChild(option);
-//         });
-//     } catch (error) {
-//         console.error("Error populating categories in edit form:", error);
-//     }
-// }
 
 // Call this function when the edit modal opens
 
-// Function to load categories dynamically from Firestore
-function loadCategories() {
-    getDocs(collection(db, "inventario")).then((querySnapshot) => {
-        const categoriaSelect = document.getElementById('categoria-select');
-        const categories = new Set(); // To store unique categories
+document.addEventListener("DOMContentLoaded", async function () {
+    const dropdowns = {
+        clothing: document.getElementById("dropdown-clothing"),
+        bedding: document.getElementById("dropdown-bedding"),
+        other: document.getElementById("dropdown-other"),
+        custom1: document.getElementById("dropdown-custom1"),
+        custom2: document.getElementById("dropdown-custom2"),
+        custom3: document.getElementById("dropdown-custom3"),
+    };
 
-        querySnapshot.forEach((docSnapshot) => {
-            const itemData = docSnapshot.data();
-            if (itemData.categoria) {
-                categories.add(itemData.categoria); // Add category to the set
+    try {
+        const querySnapshot = await getDocs(collection(db, "inventario"));
+        const categories = new Set();
+
+        // Collect all unique categories
+        querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            if (data.categoria) {
+                categories.add(data.categoria.trim().toLowerCase()); // Normalize category names
             }
         });
 
-        // Clear existing categories in the select
-        categoriaSelect.innerHTML = '<option value="all">Todos</option>'; // Reset to "Todos"
+        // Define category groups
+        const clothingItems = new Set(["remera", "vestido"]);
+        const beddingItems = new Set(["sábana", "almohada"]);
+        const OtherItems = new Set(["sábana", "almohada"]);
+        const Custom1Items = new Set(["toallon", "almohada"]);
+        const Custom2Items = new Set(["medias", "ropa interior"]);
+        const Custom3Items = new Set(["pantalon", "bermuda", "short", "pescadora"]);
 
-        // Add categories dynamically to the select element
-        categories.forEach(category => {
-            const option = document.createElement('option');
+        // Track added categories to avoid duplication
+        const addedCategories = new Set();
+
+        // Clear dropdowns and set default labels
+        dropdowns.clothing.innerHTML = '<option value="">Ropa</option>';
+        dropdowns.bedding.innerHTML = '<option value="">Cama</option>';
+        dropdowns.other.innerHTML = '<option value="">Otros</option>';
+        dropdowns.custom1.innerHTML = '<option value="">Toallones</option>';
+        dropdowns.custom2.innerHTML = '<option value="">Ropa Interior</option>';
+        dropdowns.custom3.innerHTML = '<option value="">Pantalones</option>';
+
+        // Process categories dynamically without depending on order
+        categories.forEach((category) => {
+            if (addedCategories.has(category)) return; // Skip if already added
+            addedCategories.add(category);
+
+            const option = document.createElement("option");
             option.value = category;
-            option.textContent = category;
-            categoriaSelect.appendChild(option);
+            option.textContent = category.toUpperCase(); // Always uppercase
+
+            if (clothingItems.has(category)) {
+                dropdowns.clothing.appendChild(option);
+            } else if (beddingItems.has(category)) {
+                dropdowns.bedding.appendChild(option);
+            } else if (OtherItems.has(category)) {
+                dropdowns.other.appendChild(option);
+            } else if (Custom1Items.has(category)) {
+                dropdowns.custom1.appendChild(option);
+            } else if (Custom2Items.has(category)) {
+                dropdowns.custom2.appendChild(option);
+            } else if (Custom3Items.has(category)) {
+                dropdowns.custom3.appendChild(option);
+            } else {
+                dropdowns.other.appendChild(option);
+            }
         });
 
-    }).catch(error => {
-        console.error("Error fetching categories from Firestore:", error);
-    });
-}
+    } catch (error) {
+        console.error("Error loading categories:", error);
+    }
 
-// Call loadCategories when the page is loaded or whenever necessary
-loadCategories();
+    // Function to handle dropdown selection
+    function setupDropdownRedirect(dropdown) {
+        dropdown.addEventListener("change", function (event) {
+            const selectedCategory = event.target.value;
+            if (selectedCategory) {
+                window.location.href = `categorias.html?categoria=${selectedCategory}`;
+            }
+        });
+    }
 
-// Filter items based on selected category
-document.getElementById('categoria-select').addEventListener('change', function() {
-    const selectedCategory = this.value;
-
-    document.querySelectorAll('#item-list .card').forEach(item => {
-        item.style.display = (selectedCategory === 'all' || item.dataset.category === selectedCategory) ? 'block' : 'none';
-    });
+    // Set up redirects for all dropdowns
+    Object.values(dropdowns).forEach(setupDropdownRedirect);
 });
 
 
-let currentPage = 1;
-const itemsPerPage = 25;
 
-function loadItems(page = 1) {
+
+
+
+// Filter items based on selected category
+document.getElementById('categoria-select').addEventListener('change', function () {
+    const selectedCategory = this.value;
+    const searchQuery = document.getElementById('search-box').value.trim();
+
+    // Reset to the first page and reload items
+    currentPage = 1;
+    loadItems(currentPage, selectedCategory, searchQuery);
+});
+
+let currentPage = 1;
+const itemsPerPage = 4;
+
+function loadItems(page = 1, selectedCategory = 'all', searchQuery = '') {
     getDocs(collection(db, "inventario")).then((querySnapshot) => {
         const itemList = document.getElementById('item-list');
         itemList.innerHTML = ''; // Clear existing items
@@ -105,13 +132,21 @@ function loadItems(page = 1) {
             groupedItems[groupKey].push({ ...itemData, id: itemId });
         });
 
+        // Filter items by category and search query
         const allItems = Object.values(groupedItems); // Convert groupedItems to an array
-        const totalPages = Math.ceil(allItems.length / itemsPerPage);
+        const filteredItems = allItems.filter(group => {
+            const firstItem = group[0];
+            const matchesCategory = (selectedCategory === 'all' || firstItem.categoria === selectedCategory);
+            const matchesSearch = firstItem.nombre.toLowerCase().includes(searchQuery.toLowerCase());
+            return matchesCategory && matchesSearch;
+        });
+
+        const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
         // Get items for the current page
         const startIndex = (page - 1) * itemsPerPage;
         const endIndex = page * itemsPerPage;
-        const itemsToDisplay = allItems.slice(startIndex, endIndex);
+        const itemsToDisplay = filteredItems.slice(startIndex, endIndex);
 
         // Create cards for each group in the current page
         itemsToDisplay.forEach((itemsInGroup) => {
@@ -122,26 +157,31 @@ function loadItems(page = 1) {
 
             // Add card content
             itemCard.innerHTML = `
-                <img 
-                    src="${firstItem.imageUrl || 'https://via.placeholder.com/150'}" 
-                    alt="${firstItem.nombre}" 
-                    class="item-image" 
-                    id="item-image-${firstItem.id}" 
-                >
-                <h3>${firstItem.nombre}</h3>
-                <p>Categoría: ${firstItem.categoria}</p>
-                <div class="talle-container"></div>
-                <p>Color: ${firstItem.color}</p>
-                <p class="price" id="precio-${firstItem.id}">Precio: ${firstItem.precio} pesos</p>
-                <button class="btn me-interesa-btn" data-item='${JSON.stringify(firstItem)}'>Me interesa</button>
-
-                <!-- Modal for Image Enlargement -->
-                <div class="modal" id="modal-${firstItem.id}">
-                    <span class="close-btn" id="close-modal-${firstItem.id}">&times;</span>
-                    <img class="modal-content" id="modal-image-${firstItem.id}" src="" alt="">
-                </div>
-            `;
-
+            <img 
+                src="${firstItem.imageUrl || 'img/noImage.jpg'}"
+                alt="${firstItem.nombre}" 
+                class="item-image" 
+                id="item-image-${firstItem.id}" 
+            >
+            <h3>${firstItem.nombre}</h3>
+            <p>Categoría: ${firstItem.categoria}</p>
+            <div class="talle-container"></div>
+            <p>Color: ${firstItem.color}</p>
+            <p class="price" id="precio-${firstItem.id}">
+                ${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}
+            </p>
+            <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
+                data-item='${JSON.stringify(firstItem)}'>
+                ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
+            </button>
+    
+            <!-- Modal for Image Enlargement -->
+            <div class="modal" id="modal-${firstItem.id}">
+                <span class="close-btn" id="close-modal-${firstItem.id}">&times;</span>
+                <img class="modal-content" id="modal-image-${firstItem.id}" src="" alt="">
+            </div>
+        `;
+    
             // Add talle buttons if there are multiple talles
             const talleContainer = itemCard.querySelector('.talle-container');
             if (itemsInGroup.length > 1) {
@@ -183,10 +223,165 @@ function loadItems(page = 1) {
             });
         });
 
+        document.querySelectorAll('.preguntar-precio-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const item = JSON.parse(e.target.getAttribute('data-item'));
+                sendPriceInquiryWhatsAppMessage(item);
+            });
+        });
+
         // Update pagination controls
         updatePaginationControls(totalPages, page);
     });
 }
+
+function loadRemerasOnly(searchQuery = '') {
+    getDocs(collection(db, "inventario")).then((querySnapshot) => {
+        const remeraList = document.getElementById('remera-list');
+        remeraList.innerHTML = ''; // Clear existing remeras
+
+        const groupedItems = {};
+        querySnapshot.forEach((docSnapshot) => {
+            const itemData = docSnapshot.data();
+            const itemId = docSnapshot.id;
+
+            if (itemData.categoria === 'remera') {  // Filter for remeras only
+                const groupKey = itemData.nombre;
+                if (!groupedItems[groupKey]) {
+                    groupedItems[groupKey] = [];
+                }
+                groupedItems[groupKey].push({ ...itemData, id: itemId });
+            }
+        });
+
+        const allRemeras = Object.values(groupedItems);
+        const filteredRemeras = allRemeras.filter(group => {
+            const firstItem = group[0];
+            return firstItem.nombre.toLowerCase().includes(searchQuery.toLowerCase());
+        });
+
+        const itemsToDisplay = filteredRemeras.slice(0, 5); // Show only first 5 remeras
+
+        itemsToDisplay.forEach((itemsInGroup) => {
+            const firstItem = itemsInGroup[0];
+            const itemCard = document.createElement('div');
+            itemCard.className = 'remera-card'; // Custom class for remera styling
+
+            itemCard.innerHTML = `
+                <img src="${firstItem.imageUrl || 'img/noImage.jpg'}" alt="${firstItem.nombre}" class="remera-image">
+                <h3>${firstItem.nombre}</h3>
+                <p>${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}</p>
+                <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
+                    data-item='${JSON.stringify(firstItem)}'>
+                    ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
+                </button>
+            `;
+
+            // Add the "Me interesa" button functionality
+            const meInteresaBtn = itemCard.querySelector('.me-interesa-btn');
+            if (meInteresaBtn) {
+                meInteresaBtn.addEventListener('click', (e) => {
+                    const item = JSON.parse(e.target.getAttribute('data-item'));
+                    sendWhatsAppMessage(item);
+                });
+            }
+
+            // Add the "Preguntar precio" button functionality
+            const preguntarPrecioBtn = itemCard.querySelector('.preguntar-precio-btn');
+            if (preguntarPrecioBtn) {
+                preguntarPrecioBtn.addEventListener('click', (e) => {
+                    const item = JSON.parse(e.target.getAttribute('data-item'));
+                    sendPriceInquiryWhatsAppMessage(item);
+                });
+            }
+
+            remeraList.appendChild(itemCard);
+        });
+    });
+}
+
+
+function loadPantalonesOnly(searchQuery = '') {
+    getDocs(collection(db, "inventario")).then((querySnapshot) => {
+        const pantalonList = document.getElementById('pantalon-list');
+        pantalonList.innerHTML = ''; // Clear existing pantalones
+
+        const groupedItems = {};
+        querySnapshot.forEach((docSnapshot) => {
+            const itemData = docSnapshot.data();
+            const itemId = docSnapshot.id;
+
+            if (itemData.categoria === 'pantalon') {  // Filter for pantalones only
+                const groupKey = itemData.nombre;
+                if (!groupedItems[groupKey]) {
+                    groupedItems[groupKey] = [];
+                }
+                groupedItems[groupKey].push({ ...itemData, id: itemId });
+            }
+        });
+
+        const allPantalones = Object.values(groupedItems);
+        const filteredPantalones = allPantalones.filter(group => {
+            const firstItem = group[0];
+            return firstItem.nombre.toLowerCase().includes(searchQuery.toLowerCase());
+        });
+
+        const itemsToDisplay = filteredPantalones.slice(0, 5); // Show only first 5 pantalones
+
+        itemsToDisplay.forEach((itemsInGroup) => {
+            const firstItem = itemsInGroup[0];
+            const itemCard = document.createElement('div');
+            itemCard.className = 'pantalon-card'; // Custom class for pantalones
+
+            itemCard.innerHTML = `
+                <img src="${firstItem.imageUrl || 'img/noImage.jpg'}" alt="${firstItem.nombre}" class="pantalon-image">
+                <h3>${firstItem.nombre}</h3>
+                <p>${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}</p>
+                <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
+                    data-item='${JSON.stringify(firstItem)}'>
+                    ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
+                </button>
+            `;
+
+            // Add the "Me interesa" button functionality
+            const meInteresaBtn = itemCard.querySelector('.me-interesa-btn');
+            if (meInteresaBtn) {
+                meInteresaBtn.addEventListener('click', (e) => {
+                    const item = JSON.parse(e.target.getAttribute('data-item'));
+                    sendWhatsAppMessage(item);
+                });
+            }
+
+            // Add the "Preguntar precio" button functionality
+            const preguntarPrecioBtn = itemCard.querySelector('.preguntar-precio-btn');
+            if (preguntarPrecioBtn) {
+                preguntarPrecioBtn.addEventListener('click', (e) => {
+                    const item = JSON.parse(e.target.getAttribute('data-item'));
+                    sendPriceInquiryWhatsAppMessage(item);
+                });
+            }
+
+            pantalonList.appendChild(itemCard);
+        });
+    });
+}
+
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    loadItems();            // Load all items
+    loadRemerasOnly();      // Load only remeras
+    loadPantalonesOnly();   // Load only pantalones
+});
+
+document.getElementById('search-box').addEventListener('input', function () {
+    const searchQuery = this.value.trim();
+    const selectedCategory = document.getElementById('categoria-select').value;
+
+    // Reset to the first page and reload items
+    currentPage = 1;
+    loadItems(currentPage, selectedCategory, searchQuery);
+});
 
 function updatePaginationControls(totalPages, currentPage) {
     const paginationContainer = document.getElementById('pagination');
@@ -208,98 +403,6 @@ function updatePaginationControls(totalPages, currentPage) {
 }
 
 
-// Function to load items from Firestore and display them
-// function loadItems() {
-//     getDocs(collection(db, "inventario")).then((querySnapshot) => {
-//         const itemList = document.getElementById('item-list');
-//         itemList.innerHTML = ''; // Clear existing items
-
-//         // Group items by name (or another attribute) to handle talles
-//         const groupedItems = {};
-//         querySnapshot.forEach((docSnapshot) => {
-//             const itemData = docSnapshot.data();
-//             const itemId = docSnapshot.id;
-
-//             const groupKey = itemData.nombre; // Group by 'nombre'
-//             if (!groupedItems[groupKey]) {
-//                 groupedItems[groupKey] = [];
-//             }
-//             groupedItems[groupKey].push({ ...itemData, id: itemId });
-//         });
-
-//         // Create cards for each group
-//         Object.values(groupedItems).forEach((itemsInGroup) => {
-//             const firstItem = itemsInGroup[0]; // Use the first item as a base for the card
-//             const itemCard = document.createElement('div');
-//             itemCard.className = 'card';
-//             itemCard.dataset.category = firstItem.categoria;
-
-//             // Add card content
-//             itemCard.innerHTML = `
-//                 <img 
-//                     src="${firstItem.imageUrl || 'https://via.placeholder.com/150'}" 
-//                     alt="${firstItem.nombre}" 
-//                     class="item-image" 
-//                     id="item-image-${firstItem.id}" 
-//                 >
-//                 <h3>${firstItem.nombre}</h3>
-//                 <p>Categoría: ${firstItem.categoria}</p>
-//                 <div class="talle-container"></div>
-//                 <p>Color: ${firstItem.color}</p>
-//                 <p class="price" id="precio-${firstItem.id}">Precio: ${firstItem.precio} pesos</p>
-//                 <button class="btn me-interesa-btn" data-item='${JSON.stringify(firstItem)}'>Me interesa</button>
-
-
-//                 <!-- Modal for Image Enlargement -->
-//                 <div class="modal" id="modal-${firstItem.id}">
-//                     <span class="close-btn" id="close-modal-${firstItem.id}">&times;</span>
-//                     <img class="modal-content" id="modal-image-${firstItem.id}" src="" alt="">
-//                 </div>
-//             `;
-
-//             // Add talle buttons if there are multiple talles
-//             const talleContainer = itemCard.querySelector('.talle-container');
-//             if (itemsInGroup.length > 1) {
-//                 itemsInGroup.forEach((item) => {
-//                     const talleButton = document.createElement('button');
-//                     talleButton.textContent = item.talle;
-//                     talleButton.className = 'btn talle-btn';
-//                     talleButton.dataset.id = item.id;
-//                     talleButton.dataset.talle = item.talle;
-
-//                     // Add click event to update details on selection
-//                     talleButton.addEventListener('click', function () {
-//                         // Update the selected talle button's appearance
-//                         itemCard.querySelectorAll('.talle-btn').forEach(btn => {
-//                             btn.classList.remove('selected');
-//                         });
-//                         this.classList.add('selected');
-
-//                         // Update card details with the selected talle
-//                         const selectedItem = itemsInGroup.find(i => i.id === item.id);
-//                         updateCardWithSelectedTalle(itemCard, selectedItem);
-//                     });
-
-//                     talleContainer.appendChild(talleButton);
-//                 });
-//             } else {
-//                 // If only one talle exists, hide the talle container
-//                 talleContainer.style.display = 'none';
-//             }
-
-//             itemList.appendChild(itemCard);
-//         });
-
-//         // Add event listeners for "Me interesa" buttons
-//         document.querySelectorAll('.me-interesa-btn').forEach(button => {
-//             button.addEventListener('click', (e) => {
-//                 const item = JSON.parse(e.target.getAttribute('data-item'));
-//                 sendWhatsAppMessage(item);
-//             });
-//         });
-//     });
-// }
-
 
 function updateCardWithSelectedTalle(card, selectedItem) {
     // Show a loading spinner or placeholder
@@ -309,9 +412,17 @@ function updateCardWithSelectedTalle(card, selectedItem) {
         return;
     }
 
+    // Create a container for the spinner overlay
+    const overlayContainer = document.createElement('div');
+    overlayContainer.className = 'spinner-overlay';
+    card.style.position = 'relative'; // Ensure the card is relatively positioned
+
     const spinner = document.createElement('div');
     spinner.className = 'spinner';
-    card.insertBefore(spinner, imageElement);
+    overlayContainer.appendChild(spinner);
+
+    // Add the overlay container as a sibling to the image
+    card.appendChild(overlayContainer);
 
     // Update the details after a small delay (simulating loading time)
     setTimeout(() => {
@@ -325,7 +436,8 @@ function updateCardWithSelectedTalle(card, selectedItem) {
         const priceElement = card.querySelector(`[id^="precio-"]`); // Find the price element by partial ID
         if (priceElement) {
             priceElement.id = `precio-${selectedItem.id}`; // Update the ID to match the selected item's ID
-            priceElement.textContent = `Precio: ${selectedItem.precio} pesos`;
+            priceElement.textContent = 
+                selectedItem.precio > 0 ? `Precio: ${selectedItem.precio} pesos` : 'Preguntar precio';
         } else {
             console.error(`Price element not found for item ID: ${selectedItem.id}`);
             console.log("Card HTML:", card.innerHTML); // Debugging log
@@ -333,18 +445,36 @@ function updateCardWithSelectedTalle(card, selectedItem) {
 
         // Update image
         if (imageElement) {
-            imageElement.src = selectedItem.imageUrl || 'https://via.placeholder.com/150';
+            imageElement.src = selectedItem.imageUrl || 'img/noImage.jpg';
         }
 
-        // Remove the spinner
-        spinner.remove();
-    }, 500);
+        // Remove the spinner overlay
+        overlayContainer.remove();
+    }, 1100);
 }
 
 
 
 
 
+function sendPriceInquiryWhatsAppMessage(item) {
+    const phoneNumber = "5491168759154"; // Replace with your WhatsApp number
+    const message = encodeURIComponent(
+        `Hola! Tengo una consulta sobre este producto:\n\n` +
+        `Nombre: ${item.nombre}\n` +
+        `CodCatalogo: ${item.codigoCatalogo}\n` +
+        `Categoría: ${item.categoria}\n` +
+        `Marca: ${item.marca}\n` +
+        `Talle: ${item.talle}\n` +
+        `Color: ${item.color}\n\n` +
+        `Podrías indicarme el precio por favor? Muchas gracias!`+
+        `Mira la imagen del producto: ${item.imageUrl}` // Add the image URL here 
+        
+    );
+
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+    window.open(whatsappUrl, '_blank');
+}
 
 function sendWhatsAppMessage(item) {
     const phoneNumber = "5491168759154"; // Replace with your WhatsApp number
@@ -362,49 +492,6 @@ function sendWhatsAppMessage(item) {
 
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
     window.open(whatsappUrl, '_blank');
-}
-//------------------------------------------------------------------------------------------EDITAR
-
-// Open the edit form with the item’s details
-function openEditForm(event) {
-    const itemId = event.target.getAttribute('data-id');
-    
-    // Populate the edit-categoria dropdown dynamically
-    populateEditCategories().then(() => {
-        // Get the item data from Firestore after populating the categories
-        getDoc(doc(db, "inventario", itemId)).then((docSnapshot) => {
-            if (docSnapshot.exists()) {
-                const itemData = docSnapshot.data();
-
-                // Populate the form fields with data from Firestore
-                document.getElementById('edit-id').value = itemId;
-                document.getElementById('edit-codCatalogo').value = itemData.codigoCatalogo || '';
-                document.getElementById('edit-nombre').value = itemData.nombre || '';
-                document.getElementById('edit-marca').value = itemData.marca || '';
-                document.getElementById('edit-categoria').value = itemData.categoria || '';
-                document.getElementById('edit-cantidad').value = itemData.cantidad || '';
-                document.getElementById('edit-precio').value = itemData.precio || '';
-                document.getElementById('edit-talle').value = itemData.talle || '';
-                document.getElementById('edit-color').value = itemData.color || '';
-
-                // Set the delete button's data-id attribute
-                const deleteButton = document.querySelector('.delete-btn');
-                deleteButton.setAttribute('data-id', itemId);
-
-                // Attach the delete button listener
-                deleteButton.removeEventListener('click', handleDelete); // Avoid duplicate listeners
-                deleteButton.addEventListener('click', handleDelete);
-
-                // Show the edit modal
-                document.getElementById('edit-item').classList.remove('hidden');
-                document.getElementById('edit-overlay').classList.remove('hidden');
-            }
-        }).catch((error) => {
-            console.error("Error fetching document: ", error);
-        });
-    }).catch((error) => {
-        console.error("Error populating categories: ", error);
-    });
 }
 
 
@@ -427,135 +514,34 @@ document.getElementById('categoria-select').addEventListener('change', function(
 });
 //---------------------------------------------------------------------------CARROUSEL
 
-async function loadLatestItems() {
-    try {
-        // Create a query for the latest 5 items
-        const latestItemsQuery = query(
-            collection(db, "inventario"),
-            orderBy("createdAt", "desc"), // Order by 'createdAt' field in descending order
-            limit(5) // Limit to 5 items
-        );
 
-        // Fetch the data
-        const querySnapshot = await getDocs(latestItemsQuery);
 
-        // Find the Swiper wrapper in the DOM
-        const swiperWrapper = document.querySelector('.swiper-wrapper');
-        swiperWrapper.innerHTML = ''; // Clear existing slides
+document.addEventListener("DOMContentLoaded", function () {
+    const slides = document.querySelectorAll(".carousel-slide");
+    const wrapper = document.querySelector(".carousel-wrapper");
 
-        // Process the documents
-        querySnapshot.forEach((docSnapshot) => {
-            const itemData = docSnapshot.data();
+    let currentIndex = 0;
 
-            // Create a new Swiper slide
-            const slide = document.createElement('div');
-            slide.className = 'swiper-slide';
-
-            slide.innerHTML = `
-                <img src="${itemData.imageUrl || 'https://via.placeholder.com/150'}" alt="${itemData.nombre}">
-                <h4>${itemData.nombre}</h4>
-                <p>Precio: ${itemData.precio} pesos</p>
-                
-                <button class="btn me-interesa-btn" data-item='${JSON.stringify(itemData)}'>Me interesa</button>
-            `;
-
-            // Append the slide to the Swiper wrapper
-            swiperWrapper.appendChild(slide);
-        });
-
-        // Initialize SwiperJS
-        new Swiper('.swiper', {
-            loop: true,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            pagination: {
-                el: '.swiper-pagination',
-                clickable: true,
-            },
-            slidesPerView: 1,
-            spaceBetween: 10,
-        });
-    } catch (error) {
-        console.error("Error loading latest items:", error);
-    }
-
-    document.querySelectorAll('.me-interesa-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const item = JSON.parse(e.target.getAttribute('data-item'));
-            sendWhatsAppMessage(item);
-        });
-    });
-}
-
-// Call the function after DOM is ready
-document.addEventListener('DOMContentLoaded', loadLatestItems);
-// Delete handler function to call deleteItem with item ID
-
-//-----------------------------------------------------------------------------------IMPORTAR
-export async function importData() {
-    const fileInput = document.getElementById('excel-file');
-    const file = fileInput.files[0];
-
-    if (!file) {
-        alert("Por favor, selecciona un archivo de Excel.");
-        return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = async function (event) {
-        const data = new Uint8Array(event.target.result);
-        const workbook = XLSX.read(data, { type: 'array' });
-
-        const sheetName = workbook.SheetNames[0];
-        const sheet = workbook.Sheets[sheetName];
-        const jsonData = XLSX.utils.sheet_to_json(sheet);
-
-        console.log("Datos importados:", jsonData);
-
-        for (const item of jsonData) {
-            // Ensure "Precio unitario" is treated as a string for replacement
-            const rawPrice = item["Precio unitario"] || "0"; // Default to "0" if missing or undefined
-            const priceString = rawPrice.toString(); // Convert to string in case it's not
-
-            const cleanedItem = {
-                idProducto: item["ID Producto"] || null,
-                codigoCatalogo: item["Codigo catalogo"] || "",
-                nombre: item["Nombre del producto"] || "Sin nombre",
-                marca: item["Marca"] || "Sin marca",
-                categoria: item["Categoria"] || "Sin categoría",
-                talle: item["Talle"] || "Unico",
-                color: item["Color"] || "Sin color",
-                cantidad: parseInt(item["Cantidad en stock"]) || 0,
-                precio: parseFloat(priceString.replace("$", "").trim()) || 0, // Clean and parse price
-            };
-
-            // Skip invalid rows
-            if (!cleanedItem.nombre || cleanedItem.cantidad === 0) {
-                console.warn("Fila ignorada debido a datos inválidos:", item);
-                continue;
-            }
-
-            try {
-                await addDoc(collection(db, "inventario"), cleanedItem);
-                console.log("Item agregado:", cleanedItem);
-            } catch (error) {
-                console.error("Error al agregar ítem a Firestore:", error);
-            }
-        }
-
-        alert("Datos importados exitosamente.");
-        loadItems();
+    const updateCarousel = () => {
+        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
     };
 
-    reader.readAsArrayBuffer(file);
-}
+    const nextSlide = () => {
+        currentIndex = (currentIndex + 1) % slides.length;
+        updateCarousel();
+    };
 
+    const prevSlide = () => {
+        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+        updateCarousel();
+    };
+
+
+    // Auto-slide (Optional)
+    setInterval(nextSlide, 5000); // Change slide every 5 seconds
+});
 
 // Attach importData to the global window object
-window.importData = importData;
 
 
 // Load items on page load
-loadItems();

@@ -8,6 +8,8 @@ body {
     text-transform: uppercase;
 }
 
+a{
+text-decoration: none;}
 /* Header Styles */
 .header {
     display: flex;
@@ -17,6 +19,7 @@ body {
     background-color: #38b6ff;
     color: white;
     font-family: 'Montserrat', sans-serif;
+    height: 2rem;
 }
 
 .logo {
@@ -87,37 +90,7 @@ body {
 
 }
 
-/* CARDS */
-.card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-}
 
-.card {
-    font-family: 'Montserrat', sans-serif;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    transition: transform 0.3s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card img.product-img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-}
-
-.card-content {
-    padding: 1rem;
-}
 
 .product-name {
     font-size: 1.2rem;
@@ -156,47 +129,65 @@ body {
     object-fit: cover; /* Ensures image scales properly */
     border-radius: 5px; /* Optional: Adds rounded corners */
 }
+.carousel-section {
+    width: 100%; /* Full width */
+    height: 80vh; /* 80% of viewport height */
+    position: relative;
+    overflow: hidden;
+}
+
+.carousel-wrapper {
+    display: flex;
+    height: 100%;
+    transition: transform 0.5s ease-in-out;
+}
+
+.carousel-slide {
+    flex: 0 0 100%; /* Each slide takes full width */
+    height: 100%;
+    position: relative;
+}
+
+.carousel-slide img {
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    object-fit: cover; /* Ensures the image covers the space */
+}
+
+/* Navigation Buttons */
+.carousel-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-button.prev {
+    left: 15px;
+}
+
+.carousel-button.next {
+    right: 15px;
+}
+
+.carousel-button:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
 
 /* CARROUSEL */
-
-.carousel-section {
-    margin: 20px 0;
-    overflow: hidden; /* Prevent content overflow */
-}
-
-.swiper {
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden; /* Ensure swiper content stays within the viewport */
-    padding: 0 10px; /* Add some padding to prevent edge clipping */
-    box-sizing: border-box; /* Include padding in width calculations */
-}
-
-.swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-    padding: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    height: auto;
-    max-width: 100%; /* Ensure the slide doesn't exceed the screen width */
-    box-sizing: border-box; /* Include padding in width calculations */
-}
-
-.swiper-slide img {
-    max-width: 90%; /* Keep the image within the container */
-    max-height: 400px; /* Maintain a reasonable height */
-    object-fit: contain; /* Prevent cropping */
-    border-radius: 8px;
-    display: block;
-    margin: auto;
-    box-sizing: border-box; /* Include padding in size calculations */
-}
 
 h2{
     text-align: center;
@@ -255,14 +246,23 @@ h2{
     border: 2px solid #003f7f;
 }
 
+/* SPINNER START */
+
+.spinner-overlay {
+    position: absolute; /* Ensures the spinner overlays the image */
+    top: 25%; /* Centers vertically */
+    left: 50%; /* Centers horizontally */
+    transform: translate(-50%, -50%); /* Adjusts for the spinner's size */
+    z-index: 10; /* Makes sure it stays on top */
+}
+
 .spinner {
     border: 4px solid rgba(255, 255, 255, 0.3);
     border-top: 4px solid #007bff;
     border-radius: 50%;
     width: 40px;
     height: 40px;
-    animation: spin 1s linear infinite;
-    margin: 10px auto;
+    animation: spin 2s linear infinite;
 }
 
 @keyframes spin {
@@ -271,7 +271,33 @@ h2{
 }
 
 
+#search-box {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 20px;
+    border: 2px solid #ccc;
+    border-radius: 30px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
 
+#search-box:focus {
+    border-color: #5e9ed6;
+    box-shadow: 0 0 5px rgba(94, 158, 214, 0.7);
+}
+
+#search-box::placeholder {
+    color: #999;
+    font-style: italic;
+}
+
+#search-box:hover {
+    border-color: #bbb;
+}
+/* SPINNER END */
+
+/* PAGINATION START */
 
 .pagination-container {
     display: flex;
@@ -291,4 +317,426 @@ h2{
     background-color: #007bff;
     color: white;
     font-weight: bold;
+}
+
+/* PAGINATION END */
+/* MARQUEE START */
+
+.marquee {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    background-color: black;
+    color: white;
+}
+
+.marquee-content {
+    display: flex;
+    animation: scroll 18s linear infinite;
+}
+
+.marquee p {
+    margin-right: 50px; /* Space between texts */
+    white-space: nowrap;
+
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+
+/* MARQUEE END */
+
+/* New Section for Images with Text */
+.image-section {
+    display: flex;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+}
+
+.image-item {
+    position: relative;
+    flex: 1; /* Each image takes equal space */
+    height: 100%; /* Full height */
+}
+
+.image-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the entire space */
+}
+
+.image-text {
+    position: absolute;
+    top: 85%; /* Adjust as needed */
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    font-size: 2rem; /* Customize text size */
+    font-weight: bold; /* Make the text bold */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+
+/* ITEMS */
+
+#item-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 10px;
+    background-color: #abe6eb;
+    border-radius: 10px;
+}
+/* CARDS */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    font-family: 'Montserrat', sans-serif;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card img.product-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 1rem;
+}
+
+/* REMERA START */
+
+
+#remera-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 10px;
+    background-color: #abe6eb;
+    border-radius: 10px;
+}
+
+.remera-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 600px; /* Ensure card height */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    padding: 10px;
+    position: relative; /* To contain the button positioning */
+    transition: 1s;
+
+}
+
+.remera-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.remera-card h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    flex-grow: 1; /* This allows the title and content to take available space */
+}
+
+.remera-card p {
+    font-size: 14px;
+    margin: 5px 0;
+}
+
+.remera-card .btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
+
+.remera-card .btn:hover {
+    background-color: #0056b3;
+    transition: 0.5s;
+
+}
+
+.remera-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: 1s;
+
+}
+
+/* PANTALON START */
+
+
+#pantalon-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 10px;
+    background-color: #abe6eb;
+    border-radius: 10px;
+}
+
+.pantalon-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 600px; /* Ensure card height */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f3f3f3;
+    padding: 10px;
+    position: relative; 
+    transition: 1s;
+
+}
+
+.pantalon-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    transition: 1s;
+
+}
+
+.pantalon-card .btn:hover {
+    background-color: #0056b3;
+    transition: 0.5s;
+
+}
+.pantalon-image {
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.pantalon-card h3 {
+    font-size: 18px;
+    color: #222;
+    margin: 8px 0;
+}
+
+.pantalon-card p {
+    font-size: 14px;
+    color: #444;
+    margin: 4px 0;
+}
+
+.btn-view-all {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-view-all:hover {
+    background-color: #0056b3;
+}
+
+
+/* CATEGORIES PAGE */
+
+
+
+/* Category Item Container */
+#category-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 2rem;
+    padding: 2rem;
+}
+
+/* Item Card Styles */
+.item-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.item-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.item-info {
+    padding: 1rem;
+}
+
+.item-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.item-info p {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #555;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    background-color: #38b6ff; /* Button background */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #267bbf; /* Darker blue on hover */
+}
+
+.btn-view-all {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 15px;
+    font-size: 16px;
+    background-color: #0056b3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-view-all:hover {
+    background-color: #0056b3;
+}
+
+/* Media Query for Responsiveness */
+@media (max-width: 768px) {
+    #category-title {
+        font-size: 1.5rem;
+    }
+
+    #category-items {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    #category-items {
+        grid-template-columns: 1fr;
+    }
+
+    header nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    header nav ul li {
+        margin: 0.5rem 0;
+    }
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0c243f;
+    padding: 15px;
+}
+
+.title h1 {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 15px; /* Space between dropdowns */
+}
+
+ul li {
+    display: inline-block;
+}
+
+select {
+    background: #ffffff00;
+    color: #38b6ff;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-color: #ffffff00;
+}
+
+select:hover {
+    border-color: #ffffff00;
+    background: #ffffff;
+    color: #003c80;
+}
+
+select:focus {
+    outline: none;
+    border-color: #ffcc00;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+}
+
+/* Make sure the dropdown list itself looks nice */
+select option {
+    background: #ffffff00;
+    color: #000000;
+    font-size: 14px;
+    text-transform: uppercase;
 }

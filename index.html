@@ -19,34 +19,89 @@
 </head>
 
 <body>
-    <header class="header">
-        <div class="title">
-            <h1>CELESTE CIELO TIENDA</h1>
+    <div class="marquee">
+        <div class="marquee-content">
+        <p>TEMPORADA VERANO 2025</p>
+        <strong>   <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p></strong>
+            <p>ZONA NORTE VILLA BALLESTER</p>
         </div>
-        <nav>
-            <div class="logo">
-                <img src="img/Planet.png" alt="Logo">
-            </div>
-        </nav>
-    </header>
+        <div class="marquee-content">
+            <p>TEMPORADA VERANO 2025</p>
+            <strong>   <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p></strong>
+            <p>ZONA NORTE VILLA BALLESTER</p>
+        </div>
+    </div>
 
-    <section id="latest-items" class="carousel-section">
-        <h2>Últimos Productos</h2>
-        <div class="swiper">
-            <div class="swiper-wrapper">
-                <!-- Carousel slides will be dynamically generated here -->
+
+        <!-- HEADER -->
+
+        <header class="header">
+            <div class="title">
+                <h1>CELESTE CIELO TIENDA</h1>
             </div>
-            <!-- Optional navigation buttons -->
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <!-- Pagination -->
-            <div class="swiper-pagination"></div>
-        </div>
-    </section>
-    
+            <ul>
+                <li>
+                    <select id="dropdown-clothing">
+                        <option value="">Ropa</option>
+                    </select>
+                </li>
+                <li>
+                    <select id="dropdown-bedding">
+                        <option value="">Cama</option>
+                    </select>
+                </li>
+                <select id="dropdown-custom1">
+                    <option value="">Toallones</option>
+                </select>
+                
+                <select id="dropdown-custom2">
+                    <option value="">Ropa Interior</option>
+                </select>
+                
+                <select id="dropdown-custom3">
+                    <option value="">Pantalones</option>
+                </select>
+                <li>
+                    <select id="dropdown-other">
+                        <option value="">Otros</option>
+                    </select>
+                </li>
+            </ul>
+            <nav>
+                <div class="logo">
+                    <img src="img/Planet.png" alt="Logo">
+                </div>
+            </nav>
+        </header>
+        
+        <!-- CARROUSEL -->
+
+        <section id="featured-gallery" class="carousel-section">
+            <div class="carousel-wrapper">
+                <!-- Slides -->
+                <div class="carousel-slide">
+                    <img src="img/VestidosLanding.png" alt="Slide 1">
+                </div>
+                <div class="carousel-slide">
+                    <img src="img/VestidosLanding2.png" alt="Slide 2">
+                </div>
+                <div class="carousel-slide">
+                    <img src="img/VestidosLanding3.png" alt="Slide 3">
+                </div>
+        
+                <!-- Navigation buttons -->
+                <!-- <button class="carousel-button prev">&lt;</button> -->
+                <!-- <button class="carousel-button next">&gt;</button> -->
+            </div>
+        </section>
+        
+
+
+
     <section id="inventory" class="inventory-section">
-        <h2>Inventario Actual</h2>
-        <div class="filter-bar">
+
+        <div class="filter-bar" style="display: none;">
+
             <label for="categoria-select">Categoría:</label>
             <select id="categoria-select" class="dropdown">
                 <option value="all">Todos</option>
@@ -54,13 +109,41 @@
                 <option value="Mujer">Mujer</option>
                 <option value="Niños">Niños</option>
             </select>
-        </div>
-        <div id="item-list" class="card-container">
 
         </div>
-        <div id="pagination" class="pagination-container"></div>
 
+
+        <h2>Remeras</h2>
+        <div id="remera-list"></div> 
+        <a href="remeras.html">
+            <button class="btn-view-all">Ver todas las remeras</button>
+        </a>
     </section>
+
+        <!-- SECCION -->
+
+    <div class="image-section">
+        <div class="image-item">
+            <div class="image-text">Text for Image 1</div>
+            <img src="img/Planet.png" alt="Image 1" />
+        </div>
+        <div class="image-item">
+            <div class="image-text">Text for Image 2</div>
+            <img src="img/noImage.jpg" alt="Image 2" />
+        </div>
+    </div>
+    <h2>Pantalones</h2> 
+    <div id="pantalon-list"></div>
+    <h2>Ver mas</h2> 
+
+    <div id="item-list" class="card-container"></div>
+    <div id="pagination" class="pagination-container"></div>
+
+
+
+
+    <!-- FOOTER -->
+
 
     <footer class="footer">
         <div class="footer-content">
@@ -68,12 +151,12 @@
             <p><strong>Horario:</strong> Lunes a Viernes: 9:00 AM - 6:00 PM <br> Sabados: 9:00 AM - 6:00 PM</p>
             <p><strong>Teléfono:</strong> +54 11 1234 5678</p>
             <p>
-                <strong>Instagram:</strong> 
+                <strong>Instagram:</strong>
                 <a href="https://www.instagram.com/celestecieloballester" target="_blank">@celestecieloballester</a>
             </p>
         </div>
     </footer>
-    
+
 
     <!-- Edit Form Modal -->
 

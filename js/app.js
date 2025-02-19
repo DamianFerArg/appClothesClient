@@ -29,16 +29,16 @@ document.addEventListener("DOMContentLoaded", async function () {
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             if (data.categoria) {
-                categories.add(data.categoria.trim().toLowerCase()); // Normalize category names
+                categories.add(data.categoria); // Normalize category names
             }
         });
 
         // Define category groups
-        const clothingItems = new Set(["remera", "vestido"]);
-        const beddingItems = new Set(["sábana", "almohada"]);
+        const clothingItems = new Set(["remera", "Vestido"]);
+        const beddingItems = new Set(["sabana"]);
         const OtherItems = new Set(["sábana", "almohada"]);
         const Custom1Items = new Set(["toallon", "almohada"]);
-        const Custom2Items = new Set(["medias", "ropa interior"]);
+        const Custom2Items = new Set(["medias", "Ropa interior"]);
         const Custom3Items = new Set(["pantalon", "bermuda", "short", "pescadora"]);
 
         // Track added categories to avoid duplication

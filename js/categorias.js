@@ -44,15 +44,24 @@ async function loadCategoryItems(category, searchQuery = '') {
 
     try {
         const querySnapshot = await getDocs(collection(db, "inventario"));
-        const filteredItems = [];
+        const groupedItems = {};
 
         querySnapshot.forEach((docSnapshot) => {
             const itemData = docSnapshot.data();
+            const itemId = docSnapshot.id;
+            
             // Filter items by category and search query
             if (itemData.categoria === category && itemData.nombre.toLowerCase().includes(searchQuery.toLowerCase())) {
-                filteredItems.push(itemData);
+                const groupKey = itemData.nombre; // Group by name
+
+                if (!groupedItems[groupKey]) {
+                    groupedItems[groupKey] = [];
+                }
+                groupedItems[groupKey].push({ ...itemData, id: itemId });
             }
         });
+
+        const filteredItems = Object.values(groupedItems); // Convert to array
 
         if (filteredItems.length === 0) {
             categoryItemsContainer.innerHTML = "<p>No hay productos en esta categoría.</p>";
@@ -60,27 +69,64 @@ async function loadCategoryItems(category, searchQuery = '') {
         }
 
         // Display items
-        filteredItems.forEach((item) => {
+        filteredItems.forEach((itemsInGroup) => {
+            const firstItem = itemsInGroup[0]; // Base item for the card
             const itemCard = document.createElement("div");
             itemCard.className = "item-card";
             itemCard.innerHTML = `
-                <img src="${item.imageUrl || 'img/noImage.jpg'}" alt="${item.nombre}" class="item-image">
+                <img src="${firstItem.imageUrl || 'img/noImage.jpg'}" alt="${firstItem.nombre}" class="item-image">
                 <div class="item-info">
-                    <h3>${item.nombre}</h3>
-                    <p>${item.precio > 0 ? `Precio: ${item.precio} pesos` : 'Preguntar precio'}</p>
-                    <button class="btn me-interesa-btn" data-item='${JSON.stringify(item)}'>
-                        ${item.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
+                    <h3>${firstItem.nombre}</h3>
+                    <div class="talle-container"></div>
+                    <p>${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}</p>
+                    <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
+                        data-item='${JSON.stringify(firstItem)}'>
+                        ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
                     </button>
                 </div>
             `;
 
-            // Add event listener to the button
-            itemCard.querySelector(".me-interesa-btn").addEventListener("click", (e) => {
-                const itemData = JSON.parse(e.target.getAttribute("data-item"));
-                sendWhatsAppMessage(itemData);
-            });
+            // Handle talle buttons
+            const talleContainer = itemCard.querySelector('.talle-container');
+            if (itemsInGroup.length > 1) {
+                itemsInGroup.forEach((item) => {
+                    const talleButton = document.createElement('button');
+                    talleButton.textContent = item.talle;
+                    talleButton.className = 'talle-btn';
+                    talleButton.dataset.id = item.id;
+                    talleButton.dataset.talle = item.talle;
+
+                    // Click event to update details
+                    talleButton.addEventListener('click', function () {
+                        itemCard.querySelectorAll('.talle-btn').forEach((btn) => btn.classList.remove('selected'));
+                        this.classList.add('selected');
+
+                        const selectedItem = itemsInGroup.find((i) => i.id === item.id);
+                        updateCardWithSelectedTalle(itemCard, selectedItem);
+                    });
+
+                    talleContainer.appendChild(talleButton);
+                });
+            } else {
+                talleContainer.style.display = 'none';
+            }
 
             categoryItemsContainer.appendChild(itemCard);
+        });
+
+        // Add event listeners for buttons
+        document.querySelectorAll('.me-interesa-btn').forEach((button) => {
+            button.addEventListener('click', (e) => {
+                const item = JSON.parse(e.target.getAttribute('data-item'));
+                sendWhatsAppMessage(item);
+            });
+        });
+
+        document.querySelectorAll('.preguntar-precio-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const item = JSON.parse(e.target.getAttribute('data-item'));
+                sendPriceInquiryWhatsAppMessage(item);
+            });
         });
 
     } catch (error) {
@@ -88,6 +134,35 @@ async function loadCategoryItems(category, searchQuery = '') {
     }
 }
 
+function updateCardWithSelectedTalle(itemCard, selectedItem) {
+    // Update image
+    const imageElement = itemCard.querySelector('.item-image');
+    if (selectedItem.imageUrl) {
+        imageElement.src = selectedItem.imageUrl;
+        imageElement.alt = selectedItem.nombre;
+    }
+
+    // Update price
+    const priceElement = itemCard.querySelector('.item-info p');
+    priceElement.textContent = selectedItem.precio > 0 
+        ? `Precio: ${selectedItem.precio} pesos` 
+        : 'Preguntar precio';
+
+    // Update WhatsApp button data
+    const button = itemCard.querySelector('.item-info .btn');
+    button.setAttribute('data-item', JSON.stringify(selectedItem));
+
+    // Update button text and class based on price
+    if (selectedItem.precio > 0) {
+        button.textContent = 'Me interesa';
+        button.classList.remove('preguntar-precio-btn');
+        button.classList.add('me-interesa-btn');
+    } else {
+        button.textContent = 'Preguntar precio';
+        button.classList.remove('me-interesa-btn');
+        button.classList.add('preguntar-precio-btn');
+    }
+}
 // Function to send a WhatsApp message
 function sendWhatsAppMessage(item) {
     const phone = "YOUR_WHATSAPP_NUMBER"; // Replace with actual number

@@ -64,7 +64,7 @@ async function loadCategoryItems(category, searchQuery = '') {
         const filteredItems = Object.values(groupedItems); // Convert to array
 
         if (filteredItems.length === 0) {
-            categoryItemsContainer.innerHTML = "<p>No hay productos en esta categoría.</p>";
+            categoryItemsContainer.innerHTML = "<p>No hay stock disponible en este momento.</p>";
             return;
         }
 
@@ -209,3 +209,51 @@ document.getElementById('search-box').addEventListener('input', function () {
 if (categoryFromURL) {
     loadCategoryItems(categoryFromURL);
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.href.includes("categorias.html")) {
+        document.querySelector(".header").classList.add("categorias-margin");
+
+        // Apply margin to #category-items too
+        const categoryItems = document.querySelector("#category-items");
+        if (categoryItems) {
+            categoryItems.classList.add("categorias-margin-top");
+        }
+    }
+});
+document.getElementById("category-dropdown").addEventListener("change", function () {
+    let selectedCategory = this.value;
+    if (selectedCategory) {
+        // Reload the page with the selected category as a URL parameter
+        window.location.href = window.location.pathname + "?categoria=" + selectedCategory;
+    }
+});
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const fullScreenMenu = document.querySelector(".full-screen-menu");
+    const closeMenu = document.querySelector(".close-menu");
+
+    menuToggle.addEventListener("click", function () {
+        fullScreenMenu.classList.add("active");
+    });
+
+    closeMenu.addEventListener("click", function () {
+        fullScreenMenu.classList.remove("active");
+    });
+
+    // Close menu when clicking outside the menu items
+    fullScreenMenu.addEventListener("click", function (event) {
+        if (event.target === fullScreenMenu) {
+            fullScreenMenu.classList.remove("active");
+        }
+    });
+});
+// Call the function to populate the menu
+document.querySelectorAll('.category-title').forEach((categoryTitle) => {
+    categoryTitle.addEventListener('click', (e) => {
+        const subcategoryList = categoryTitle.nextElementSibling; // Get the next sibling (subcategory list)
+
+        // Toggle the 'open' class to show/hide the subcategories
+        subcategoryList.classList.toggle('open');
+    });
+});

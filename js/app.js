@@ -231,7 +231,7 @@ function loadItems(page = 1, selectedCategory = 'all', searchQuery = '') {
         });
 
         // Update pagination controls
-        updatePaginationControls(totalPages, page);
+        // updatePaginationControls(totalPages, page);
     });
 }
 
@@ -260,7 +260,7 @@ function loadRemerasOnly(searchQuery = '') {
             return firstItem.nombre.toLowerCase().includes(searchQuery.toLowerCase());
         });
 
-        const itemsToDisplay = filteredRemeras.slice(0, 5); // Show only first 5 remeras
+        const itemsToDisplay = filteredRemeras.slice(0, 6); // Show only first 5 remeras
 
         itemsToDisplay.forEach((itemsInGroup) => {
             const firstItem = itemsInGroup[0];
@@ -326,7 +326,7 @@ function loadPantalonesOnly(searchQuery = '') {
             return firstItem.nombre.toLowerCase().includes(searchQuery.toLowerCase());
         });
 
-        const itemsToDisplay = filteredPantalones.slice(0, 5); // Show only first 5 pantalones
+        const itemsToDisplay = filteredPantalones.slice(0, 6); // Show only first 5 pantalones
 
         itemsToDisplay.forEach((itemsInGroup) => {
             const firstItem = itemsInGroup[0];
@@ -374,33 +374,33 @@ document.addEventListener("DOMContentLoaded", function () {
     loadPantalonesOnly();   // Load only pantalones
 });
 
-document.getElementById('search-box').addEventListener('input', function () {
-    const searchQuery = this.value.trim();
-    const selectedCategory = document.getElementById('categoria-select').value;
+// document.getElementById('search-box').addEventListener('input', function () {
+//     const searchQuery = this.value.trim();
+//     const selectedCategory = document.getElementById('categoria-select').value;
 
-    // Reset to the first page and reload items
-    currentPage = 1;
-    loadItems(currentPage, selectedCategory, searchQuery);
-});
+//     // Reset to the first page and reload items
+//     currentPage = 1;
+//     loadItems(currentPage, selectedCategory, searchQuery);
+// });
 
-function updatePaginationControls(totalPages, currentPage) {
-    const paginationContainer = document.getElementById('pagination');
-    paginationContainer.innerHTML = ''; // Clear existing controls
+// function updatePaginationControls(totalPages, currentPage) {
+//     const paginationContainer = document.getElementById('pagination');
+//     paginationContainer.innerHTML = ''; // Clear existing controls
 
-    for (let i = 1; i <= totalPages; i++) {
-        const pageButton = document.createElement('button');
-        pageButton.textContent = i;
-        pageButton.className = 'pagination-btn';
-        if (i === currentPage) pageButton.classList.add('active');
+//     for (let i = 1; i <= totalPages; i++) {
+//         const pageButton = document.createElement('button');
+//         pageButton.textContent = i;
+//         pageButton.className = 'pagination-btn';
+//         if (i === currentPage) pageButton.classList.add('active');
 
-        pageButton.addEventListener('click', () => {
-            currentPage = i;
-            loadItems(currentPage);
-        });
+//         pageButton.addEventListener('click', () => {
+//             currentPage = i;
+//             loadItems(currentPage);
+//         });
 
-        paginationContainer.appendChild(pageButton);
-    }
-}
+//         paginationContainer.appendChild(pageButton);
+//     }
+// }
 
 
 
@@ -518,30 +518,58 @@ document.getElementById('categoria-select').addEventListener('change', function(
 
 document.addEventListener("DOMContentLoaded", function () {
     const slides = document.querySelectorAll(".carousel-slide");
-    const wrapper = document.querySelector(".carousel-wrapper");
-
     let currentIndex = 0;
 
-    const updateCarousel = () => {
-        wrapper.style.transform = `translateX(-${currentIndex * 100}%)`;
-    };
+    function showSlide(index) {
+        slides.forEach((slide, i) => {
+            slide.style.display = i === index ? "block" : "none";
+        });
+    }
 
-    const nextSlide = () => {
+    function nextSlide() {
         currentIndex = (currentIndex + 1) % slides.length;
-        updateCarousel();
-    };
+        showSlide(currentIndex);
+    }
 
-    const prevSlide = () => {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-        updateCarousel();
-    };
+    // Show first slide initially
+    showSlide(currentIndex);
 
-
-    // Auto-slide (Optional)
-    setInterval(nextSlide, 5000); // Change slide every 5 seconds
+    // Change slide every 3 seconds
+    setInterval(nextSlide, 3000);
 });
 
-// Attach importData to the global window object
 
+// Attach importData to the global window object
+document.addEventListener("DOMContentLoaded", function () {
+    const menuToggle = document.querySelector(".menu-toggle");
+    const fullScreenMenu = document.querySelector(".full-screen-menu");
+    const closeMenu = document.querySelector(".close-menu");
+
+    menuToggle.addEventListener("click", function () {
+        fullScreenMenu.classList.add("active");
+    });
+
+    closeMenu.addEventListener("click", function () {
+        fullScreenMenu.classList.remove("active");
+    });
+
+    // Close menu when clicking outside the menu items
+    fullScreenMenu.addEventListener("click", function (event) {
+        if (event.target === fullScreenMenu) {
+            fullScreenMenu.classList.remove("active");
+        }
+    });
+});
 
 // Load items on page load
+
+
+// Call the function to populate the menu
+document.querySelectorAll('.category-title').forEach((categoryTitle) => {
+    categoryTitle.addEventListener('click', (e) => {
+        const subcategoryList = categoryTitle.nextElementSibling; // Get the next sibling (subcategory list)
+
+        // Toggle the 'open' class to show/hide the subcategories
+        subcategoryList.classList.toggle('open');
+    });
+});

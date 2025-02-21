@@ -6,6 +6,7 @@
     <title>Categorías</title>
     <script type="module" src="./js/categorias.js"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
 
 </head>
 <body>
@@ -21,12 +22,17 @@
             <p>ZONA NORTE VILLA BALLESTER</p>
         </div>
     </div>
-    <header class="header">
-        <div class="title">
+    <header class="header categorias-margin-top-extra">
+        
+        <div class="title ">
             <h1>CELESTE CIELO TIENDA</h1>
         </div>
+
+        
         <input type="text" id="search-box" placeholder="Buscar por nombre..." />
-        <ul>
+        <button class="menu-toggle">&#9776;</button>
+
+        <ul class="normal-menu ">
             <li>
                 <select id="category-dropdown">
                     <option value="">Categorías</option>
@@ -42,6 +48,59 @@
         </nav>
 
     </header>
+    <div class="full-screen-menu">
+        <button class="close-menu">&times;</button>
+        <ul class="category-list">
+            <!-- Category: Ropa -->
+            <li class="category-item">
+                <a href="#" class="category-title">Ropa</a>
+                <ul class="subcategory-list">
+                    <li><a href="categorias.html?categoria=remera">Remera</a></li> 
+                    <li><a href="categorias.html?categoria=Vestido">Vestido</a></li>
+                </ul>
+            </li>
+            <!-- Category: Cama -->
+            <li class="category-item">
+                <a href="#" class="category-title">Cama</a>
+                <ul class="subcategory-list">
+                    <li><a href="categorias.html?categoria=sabana">Sábana</a></li>
+                </ul>
+            </li>
+            <!-- Category: Toallones -->
+            <li class="category-item">
+                <a href="#" class="category-title">Toallones</a>
+                <ul class="subcategory-list">
+                    <li><a href="categorias.html?categoria=toallon">Toallón</a></li>
+                </ul>
+            </li>
+            <!-- Category: Ropa Interior -->
+            <li class="category-item">
+                <a href="#" class="category-title">Ropa Interior</a>
+                <ul class="subcategory-list">
+                    <li><a href="categorias.html?categoria=medias">Medias</a></li>
+                    <li><a href="categorias.html?categoria=ropa-interior">Ropa Interior</a></li>
+                </ul>
+            </li>
+            <!-- Category: Pantalones -->
+            <li class="category-item">
+                <a href="#" class="category-title">Pantalones</a>
+                <ul class="subcategory-list">
+                    <li><a href="categorias.html?categoria=pantalon">Pantalón</a></li>
+                    <li><a href="categorias.html?categoria=bermuda">Bermuda</a></li>
+                    <li><a href="categorias.html?categoria=short">Short</a></li>
+                    <li><a href="categorias.html?categoria=pescadora">Pescadora</a></li>
+                </ul>
+            </li>
+            <!-- Category: Otros -->
+            <li class="category-item">
+                <a href="#" class="category-title">Otros</a>
+                <ul class="subcategory-list">
+                    <li><a href="categorias.html?categoria=sabana">Sábana</a></li>
+                    <li><a href="categorias.html?categoria=almohada">Almohada</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 
     <h2 id="category-title"></h2>
     <div id="category-items"></div>

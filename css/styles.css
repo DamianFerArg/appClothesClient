@@ -3,7 +3,7 @@ body {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #98cce4;
     color: #333;
     text-transform: uppercase;
 }
@@ -12,15 +12,45 @@ a{
 text-decoration: none;}
 /* Header Styles */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background-color: #38b6ff;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10; /* Ensures it's above the carousel */
     color: white;
     font-family: 'Montserrat', sans-serif;
-    height: 2rem;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: none; /* No background */
 }
+
+.header ul {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+
+.header .btn-primary {
+    background-color: white;
+    color: #38b6ff;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.header .btn-primary:hover {
+    background-color: #38b6ff;
+    color: white;
+}
+
 
 .logo {
     display: flex;
@@ -54,21 +84,6 @@ text-decoration: none;}
 }
 
 
-.header .btn-primary {
-    background-color: white;
-    color: #38b6ff;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.header .btn-primary:hover {
-    background-color: #38b6ff;
-    color: white;
-}
 
 /* Inventory Section */
 .inventory-section {
@@ -90,6 +105,37 @@ text-decoration: none;}
 
 }
 
+
+/* Wrapper to apply the hover underline */
+.dropdown-wrapper {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px; /* Space for the underline */
+}
+.dropdown-wrapper select {
+    background: transparent; /* Makes the dropdowns transparent */
+    color: black;
+    padding: 5px;
+    font-size: 1rem;
+}
+
+/* The underline effect */
+.dropdown-wrapper::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #003c80;
+    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+}
+
+/* Expand underline from center on hover */
+.dropdown-wrapper:hover::after {
+    width: 100%;
+    left: 0;
+}
 
 
 .product-name {
@@ -131,27 +177,24 @@ text-decoration: none;}
 }
 .carousel-section {
     width: 100%; /* Full width */
-    height: 80vh; /* 80% of viewport height */
+    height: 20% !important; /* 80% of viewport height */
     position: relative;
     overflow: hidden;
 }
 
 .carousel-wrapper {
+    position: relative;
+}
+.carousel-slide {
     display: flex;
-    height: 100%;
+    width: 100%;
     transition: transform 0.5s ease-in-out;
 }
 
-.carousel-slide {
-    flex: 0 0 100%; /* Each slide takes full width */
-    height: 100%;
-    position: relative;
-}
-
 .carousel-slide img {
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    object-fit: cover; /* Ensures the image covers the space */
+    width: 100%;
+    height: auto;
+    display: block;
 }
 
 /* Navigation Buttons */
@@ -171,6 +214,7 @@ text-decoration: none;}
     display: flex;
     justify-content: center;
     align-items: center;
+    visibility: hidden;
 }
 
 .carousel-button.prev {
@@ -399,7 +443,6 @@ h2{
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
     padding: 10px;
-    background-color: #abe6eb;
     border-radius: 10px;
 }
 /* CARDS */
@@ -442,7 +485,6 @@ h2{
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
     padding: 10px;
-    background-color: #abe6eb;
     border-radius: 10px;
 }
 
@@ -512,7 +554,6 @@ h2{
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 16px;
     padding: 10px;
-    background-color: #abe6eb;
     border-radius: 10px;
 }
 
@@ -688,14 +729,6 @@ h2{
     }
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #0c243f;
-    padding: 15px;
-}
-
 .title h1 {
     color: #ffffff;
     font-size: 24px;
@@ -729,31 +762,6 @@ select {
     text-align: center;
 }
 
-/* Wrapper to apply the hover underline */
-.dropdown-wrapper {
-    position: relative;
-    display: inline-block;
-    padding-bottom: 5px; /* Space for the underline */
-}
-
-/* The underline effect */
-.dropdown-wrapper::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background-color: #003c80;
-    transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
-}
-
-/* Expand underline from center on hover */
-.dropdown-wrapper:hover::after {
-    width: 100%;
-    left: 0;
-}
-
 .logo img {
     width: 50px;
     height: auto;
@@ -766,13 +774,23 @@ select option {
     font-size: 14px;
     text-transform: uppercase;
 }
+.categorias-margin-top-extra {
+    margin-top: 5rem;
+}
+
+.categorias-margin .categorias-margin-top {
+    margin-top: 10%; /* Adjust as needed */
+}
 /* Make Header Responsive */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .header {
         flex-direction: column;
         height: auto;
         padding: 0.5rem;
         text-align: center;
+        max-width: fit-content;
+        left: 20%;
+        right: 20%;
     }
 
     .header ul {
@@ -782,13 +800,30 @@ select option {
         gap: 5px;
     }
 
-    .header ul select {
+    .normal-menu {
+
+        display: none !important;
         font-size: 0.8rem;
     }
 
     .logo img {
         width: 40px;
         height: 40px;
+    }
+    .categorias-margin {
+        margin-top: 15%;
+        margin-bottom: 15%; /* Adjust as needed */
+        
+        width: fit-content; /* Adjust width to content */
+        max-width: 80%; /* Optional: Limits width */
+        
+        position: relative; /* Ensures positioning */
+        left: 50%;
+        transform: translateX(-50%); /* Centers the element horizontally
+    }
+    .categorias-margin-top {
+        margin-top: 50%;
+        margin-bottom: 25%; /* Adjust as needed */
     }
 }
 
@@ -799,6 +834,8 @@ select option {
     }
 
     .carousel-slide img {
+        margin-top: 25%;
+
         height: auto;
         max-width: 100%;
     }
@@ -846,3 +883,162 @@ select option {
         height: auto;
     }
 }
+.full-screen-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    z-index: 1000;
+}
+.full-screen-menu select {
+    display: block;
+    background: white;
+    color: black;
+    font-size: 18px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 200px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+/* Show the menu when active */
+.full-screen-menu.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Style menu items */
+.full-screen-menu ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.full-screen-menu ul li {
+    margin: 20px 0;
+}
+
+.full-screen-menu ul li a {
+    color: #98cce4;
+    font-size: 24px;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+}
+
+/* Hide subcategories by default */
+.subcategory-list {
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease, opacity 0.5s ease; /* Transition height and opacity */
+    margin-top: 10px;
+    padding-left: 20px;  /* Indent subcategory items */
+}
+.subcategory-list.open {
+    height: auto;  /* Let it grow to its natural height */
+    opacity: 1;
+}
+
+.subcategory-list li {
+    margin: 10px 0;
+}
+
+.subcategory-list li a {
+    
+    color: white !important;
+    font-size: 18px;
+    font-weight: normal;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.subcategory-list li a:hover {
+    text-decoration: underline;
+}
+
+/* Show subcategories when the parent is active */
+.full-screen-menu ul li.active > .subcategory-list {
+    display: block !important; /* Show the subcategory list when the parent is active */
+}
+/* Make sure select options are also vertically aligned */
+select option {
+    display: block; /* Make each option stack vertically */
+}
+
+.full-screen-menu ul li a:hover {
+    color: #98cce4;
+}
+
+
+/* Style the close button */
+.close-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 40px;
+    color: white;
+    cursor: pointer;
+}
+
+/* Style the menu toggle (burger icon) */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: white;
+}
+
+
+.nav-menu {
+    display: none !important;
+    flex-direction: column;
+    position: absolute;
+    top: 60px; /* Adjust depending on header size */
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
+
+/* Show the menu when the 'active' class is applied */
+.nav-menu.active {
+    display: flex  !important;
+}
+
+/* Style the menu toggle button */
+.menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+}
+
+/* Make the menu visible only on small screens */
+@media (max-width: 768px) {
+    .menu-toggle {
+        display: block;
+    }
+}
+

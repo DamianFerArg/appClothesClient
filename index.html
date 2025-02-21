@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
     <script>
         // Redirect to login page if the user is not logged in
         // if (sessionStorage.getItem("isLoggedIn") !== "true") {
@@ -21,97 +21,178 @@
 <body>
     <div class="marquee">
         <div class="marquee-content">
-        <p>TEMPORADA VERANO 2025</p>
-        <strong>   <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p></strong>
+            <p>TEMPORADA VERANO 2025</p>
+            <strong>
+                <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p>
+            </strong>
             <p>ZONA NORTE VILLA BALLESTER</p>
+            <strong>
+                <p> 🪐</p>
+            </strong>
         </div>
         <div class="marquee-content">
             <p>TEMPORADA VERANO 2025</p>
-            <strong>   <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p></strong>
+            <strong>
+                <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p>
+            </strong>
             <p>ZONA NORTE VILLA BALLESTER</p>
+            <strong>
+                <p> 🪐</p>
+            </strong>
+        </div>
+        <div class="marquee-content">
+            <p>TEMPORADA VERANO 2025</p>
+            <strong>
+                <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p>
+            </strong>
+            <p>ZONA NORTE VILLA BALLESTER</p>
+            <strong>
+                <p> 🪐</p>
+            </strong>
+        </div>
+        <div class="marquee-content">
+            <p>TEMPORADA VERANO 2025</p>
+            <strong>
+                <p>LAS MEJORES PRENDAS Y LOS MEJORES PRECIOS EN UN MISMO LUGAR</p>
+            </strong>
+            <p>ZONA NORTE VILLA BALLESTER</p>
+            <strong>
+                <p> 🪐</p>
+            </strong>
         </div>
     </div>
 
 
-        <!-- HEADER -->
+    <!-- HEADER -->
 
+    <section id="featured-gallery" class="carousel-section">
+            <button class="menu-toggle">&#9776;</button>
+            <!-- Move Header Inside Carousel -->
         <header class="header">
             <div class="title">
                 <h1>CELESTE CIELO TIENDA</h1>
             </div>
-            <ul>
+
+
+            <!-- Full-Screen Menu -->
+            <div class="full-screen-menu">
+                <button class="close-menu">&times;</button>
+                <ul class="category-list">
+                    <!-- Category: Ropa -->
+                    <li class="category-item">
+                        <a href="#" class="category-title">Ropa</a>
+                        <ul class="subcategory-list">
+                            <li><a href="categorias.html?categoria=remera">Remera</a></li> 
+                            <li><a href="categorias.html?categoria=Vestido">Vestido</a></li>
+                        </ul>
+                    </li>
+                    <!-- Category: Cama -->
+                    <li class="category-item">
+                        <a href="#" class="category-title">Cama</a>
+                        <ul class="subcategory-list">
+                            <li><a href="categorias.html?categoria=sabana">Sábana</a></li>
+                        </ul>
+                    </li>
+                    <!-- Category: Toallones -->
+                    <li class="category-item">
+                        <a href="#" class="category-title">Toallones</a>
+                        <ul class="subcategory-list">
+                            <li><a href="categorias.html?categoria=toallon">Toallón</a></li>
+                        </ul>
+                    </li>
+                    <!-- Category: Ropa Interior -->
+                    <li class="category-item">
+                        <a href="#" class="category-title">Ropa Interior</a>
+                        <ul class="subcategory-list">
+                            <li><a href="categorias.html?categoria=medias">Medias</a></li>
+                            <li><a href="categorias.html?categoria=ropa-interior">Ropa Interior</a></li>
+                        </ul>
+                    </li>
+                    <!-- Category: Pantalones -->
+                    <li class="category-item">
+                        <a href="#" class="category-title">Pantalones</a>
+                        <ul class="subcategory-list">
+                            <li><a href="categorias.html?categoria=pantalon">Pantalón</a></li>
+                            <li><a href="categorias.html?categoria=bermuda">Bermuda</a></li>
+                            <li><a href="categorias.html?categoria=short">Short</a></li>
+                            <li><a href="categorias.html?categoria=pescadora">Pescadora</a></li>
+                        </ul>
+                    </li>
+                    <!-- Category: Otros -->
+                    <li class="category-item">
+                        <a href="#" class="category-title">Otros</a>
+                        <ul class="subcategory-list">
+                            <li><a href="categorias.html?categoria=sabana">Sábana</a></li>
+                            <li><a href="categorias.html?categoria=almohada">Almohada</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            
+
+            <ul class="normal-menu">
                 <li>
-                    <div class="dropdown-wrapper">
-                        <select id="dropdown-clothing">
+                    <div class="dropdown-wrapper"><select id="dropdown-clothing">
                             <option value="">Ropa</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </li>
                 <li>
-                    <div class="dropdown-wrapper">
-                        <select id="dropdown-bedding">
+                    <div class="dropdown-wrapper"><select id="dropdown-bedding">
                             <option value="">Cama</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </li>
                 <li>
-                    <div class="dropdown-wrapper">
-                        <select id="dropdown-custom1">
+                    <div class="dropdown-wrapper"><select id="dropdown-custom1">
                             <option value="">Toallones</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </li>
                 <li>
-                    <div class="dropdown-wrapper">
-                        <select id="dropdown-custom2">
+                    <div class="dropdown-wrapper"><select id="dropdown-custom2">
                             <option value="">Ropa Interior</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </li>
                 <li>
-                    <div class="dropdown-wrapper">
-                        <select id="dropdown-custom3">
+                    <div class="dropdown-wrapper"><select id="dropdown-custom3">
                             <option value="">Pantalones</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </li>
                 <li>
-                    <div class="dropdown-wrapper">
-                        <select id="dropdown-other">
+                    <div class="dropdown-wrapper"><select id="dropdown-other">
                             <option value="">Otros</option>
-                        </select>
-                    </div>
+                        </select></div>
                 </li>
             </ul>
-            <nav>
-                <div class="logo">
-                    <img src="img/Planet.png" alt="Logo">
-                </div>
-            </nav>
         </header>
-        
-        
-        <!-- CARROUSEL -->
 
-        <section id="featured-gallery" class="carousel-section">
-            <div class="carousel-wrapper">
-                <!-- Slides -->
-                <div class="carousel-slide">
-                    <img src="img/VestidosLanding.png" alt="Slide 1">
-                </div>
-                <div class="carousel-slide">
-                    <img src="img/VestidosLanding2.png" alt="Slide 2">
-                </div>
-                <div class="carousel-slide">
-                    <img src="img/VestidosLanding3.png" alt="Slide 3">
-                </div>
-        
-                <!-- Navigation buttons -->
-                <!-- <button class="carousel-button prev">&lt;</button> -->
-                <!-- <button class="carousel-button next">&gt;</button> -->
+        <div class="carousel-wrapper">
+            <!-- Slides -->
+            <div class="carousel-slide">
+                <a href="categorias.html?categoria=remera">
+                    <img src="img/landing.png" alt="Slide 1">
+                </a>
             </div>
-        </section>
-        
+            <div class="carousel-slide">
+                <a href="categorias.html?categoria=pantalon">
+                    <img src="img/landing2.png" alt="Slide 2">
+                </a>
+            </div>
+            <div class="carousel-slide">
+                <a href="categorias.html?categoria=bermuda">
+                    <img src="img/landing3.png" alt="Slide 3">
+                </a>
+            </div>
+            <div class="carousel-slide">
+                <a href="categorias.html?categoria=bermuda">
+                    <img src="img/landing4.png" alt="Slide 4">
+                </a>
+            </div>
+            <!-- Navigation buttons -->
+            <button class="carousel-button prev"></button>
+            <button class="carousel-button next"></button>
+        </div>
+    </section>
+
+
 
 
 
@@ -130,33 +211,53 @@
         </div>
 
 
-        <h2>Remeras</h2>
-        <div id="remera-list"></div> 
-        <a href="remeras.html">
+        <div id="remera-list"></div>
+        <a href="categorias.html?categoria=remera">
             <button class="btn-view-all">Ver todas las remeras</button>
         </a>
     </section>
 
-        <!-- SECCION -->
+    <!-- SECCION -->
 
-        <div class="image-section">
-            <div class="image-item">
-                <div class="image-text">REMERAS</div>
-                <a href="http://127.0.0.1:5501/categorias.html?categoria=remera">
-                    <img src="img/pruebabatik.png" alt="Image 1" />
-                </a>
-            </div>
-            <div class="image-item">
-                <div class="image-text">MUSCULOSAS</div>
-                <a href="http://127.0.0.1:5501/categorias.html?categoria=remera">
-                    <img src="img/pruebabatik2.png" alt="Image 2" />
-                </a>
-            </div>
+    <div class="image-section">
+        <div class="image-item">
+            <div class="image-text">REMERAS</div>
+            <a href="categorias.html?categoria=remera">
+                <img src="img/pruebabatik.png" alt="Image 1" />
+            </a>
         </div>
-        
-    <h2>Pantalones</h2> 
-    <div id="pantalon-list"></div>
-    <h2>Ver mas</h2> 
+        <div class="image-item">
+            <div class="image-text">MUSCULOSAS</div>
+            <a href="categorias.html?categoria=remera">
+                <img src="img/pruebabatik2.png" alt="Image 2" />
+            </a>
+        </div>
+    </div>
+
+    <section class="inventory-section">
+        <div id="pantalon-list"></div>
+        <a href="categorias.html?categoria=pantalon">
+            <button class="btn-view-all">Ver todas los pantalones</button>
+        </a>
+    </section>
+
+
+
+    <div class="image-section">
+        <div class="image-item">
+            <div class="image-text">SHORTS</div>
+            <a href="categorias.html?categoria=short">
+                <img src="img/stockModelcloseUp.jpg" alt="Image 1" />
+            </a>
+        </div>
+        <div class="image-item">
+            <div class="image-text">BERMUDAS</div>
+            <a href="categorias.html?categoria=bermuda">
+                <img src="img/stockModel4closeUp.jpg" alt="Image 2" />
+            </a>
+        </div>
+    </div>
+    <h2>Ver mas</h2>
 
     <div id="item-list" class="card-container"></div>
 
@@ -169,32 +270,28 @@
     <footer class="footer">
         <div class="footer-content">
             <p>
-                <strong>Dirección:</strong> 
-                <a href="https://www.google.com/maps/place/Celeste+Cielo/@-34.5453709,-58.5538601,17z/data=!3m1!4b1!4m6!3m5!1s0x95bcb15bb03bc623:0x6115fbfb6ee15d88!8m2!3d-34.5453754!4d-58.5489892!16s%2Fg%2F11svk74bb_?entry=ttu&g_ep=EgoyMDI1MDIxMi4wIKXMDSoASAFQAw%3D%3D" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
-                  Alvear 2118, B1653 Villa Ballester, Provincia de Buenos Aires
+                <strong>Dirección:</strong>
+                <a href="https://www.google.com/maps/place/Celeste+Cielo/@-34.5453709,-58.5538601,17z/data=!3m1!4b1!4m6!3m5!1s0x95bcb15bb03bc623:0x6115fbfb6ee15d88!8m2!3d-34.5453754!4d-58.5489892!16s%2Fg%2F11svk74bb_?entry=ttu&g_ep=EgoyMDI1MDIxMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" rel="noopener noreferrer">
+                    Alvear 2118, B1653 Villa Ballester, Provincia de Buenos Aires
                 </a>
-              </p>
-              
-              <p>
-                <strong>Horario:</strong> 
-                <a href="https://www.google.com/maps/place/Celeste+Cielo/@-34.5453709,-58.5538601,17z/data=!3m1!4b1!4m6!3m5!1s0x95bcb15bb03bc623:0x6115fbfb6ee15d88!8m2!3d-34.5453754!4d-58.5489892!16s%2Fg%2F11svk74bb_?entry=ttu&g_ep=EgoyMDI1MDIxMi4wIKXMDSoASAFQAw%3D%3D" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
-                  Martes a Viernes: 5:00 PM - 7:30 PM <br> Sábados: 10:00 AM - 2:00 PM
+            </p>
+
+            <p>
+                <strong>Horario:</strong>
+                <a href="https://www.google.com/maps/place/Celeste+Cielo/@-34.5453709,-58.5538601,17z/data=!3m1!4b1!4m6!3m5!1s0x95bcb15bb03bc623:0x6115fbfb6ee15d88!8m2!3d-34.5453754!4d-58.5489892!16s%2Fg%2F11svk74bb_?entry=ttu&g_ep=EgoyMDI1MDIxMi4wIKXMDSoASAFQAw%3D%3D"
+                    target="_blank" rel="noopener noreferrer">
+                    Martes a Viernes: 5:00 PM - 7:30 PM <br> Sábados: 10:00 AM - 2:00 PM
                 </a>
-              </p>
-              
-              <p>
-                <strong>Teléfono:</strong> 
-                <a href="https://wa.me/5491168759154" 
-                   target="_blank" 
-                   rel="noopener noreferrer">
-                  +54 9 11 6875-9154
+            </p>
+
+            <p>
+                <strong>Teléfono:</strong>
+                <a href="https://wa.me/5491168759154" target="_blank" rel="noopener noreferrer">
+                    +54 9 11 6875-9154
                 </a>
-              </p>
-              
+            </p>
+
             <p>
                 <strong>Instagram:</strong>
                 <a href="https://www.instagram.com/celestecieloballester" target="_blank">@celestecieloballester</a>

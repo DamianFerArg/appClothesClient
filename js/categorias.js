@@ -220,9 +220,10 @@ async function loadCategoryItems(category, searchQuery = '') {
             // **Handle talle buttons (if more than one talle exists)**
             const talleContainer = itemCard.querySelector('.talle-container');
             const tallesArray = Object.keys(talles);
+            let firstTalleButton = null;
 
-            if (tallesArray.length > 1) {
-                tallesArray.forEach((talle) => {
+            if (tallesArray.length > 0) {
+                tallesArray.forEach((talle, index) => {
                     const talleButton = document.createElement('button');
                     talleButton.textContent = talle;
                     talleButton.className = 'talle-btn';
@@ -235,6 +236,10 @@ async function loadCategoryItems(category, searchQuery = '') {
                     });
 
                     talleContainer.appendChild(talleButton);
+
+                    if (index === 0) {
+                        firstTalleButton = talleButton;
+                    }
                 });
             } else {
                 talleContainer.style.display = 'none';
@@ -260,6 +265,11 @@ async function loadCategoryItems(category, searchQuery = '') {
                 });
             } else {
                 colorContainer.style.display = 'none';
+            }
+
+            if (firstTalleButton) {
+                firstTalleButton.classList.add('selected'); // Highlight the first talle
+                firstTalleButton.click(); // Simulate click to load colors
             }
 
             categoryItemsContainer.appendChild(itemCard);

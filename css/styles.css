@@ -617,6 +617,7 @@ h2{
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
+    text-transform: uppercase;
 }
 
 .btn-view-all:hover {

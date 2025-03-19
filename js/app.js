@@ -573,3 +573,10 @@ document.querySelectorAll('.category-title').forEach((categoryTitle) => {
         subcategoryList.classList.toggle('open');
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const images = document.querySelectorAll('img'); // Select all images
+    images.forEach(img => {
+        img.setAttribute('loading', 'lazy'); // Set loading="lazy" for each image
+    });
+});

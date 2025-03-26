@@ -206,10 +206,10 @@ async function loadCategoryItems(category, searchQuery = '') {
             itemCard.innerHTML = `
                 <img src="${firstItem.imageUrl || 'img/noImage.jpg'}" alt="${firstItem.nombre}" class="item-image">
                 <div class="item-info">
-                    <h3>${firstItem.nombre} (${firstItem.marca})</h3>
+                    <h3>${firstItem.nombre} </h3>
                     <div class="talle-container"></div>
                     <div class="color-container"></div>
-                    <p>${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}</p>
+                    <p>${firstItem.precio > 0 ? `Precio: $ ${firstItem.precio} ` : 'Preguntar precio'}</p>
                     <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
                         data-item='${JSON.stringify(firstItem)}'>
                         ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
@@ -308,7 +308,7 @@ function updateCardWithSelectedTalleAndColors(itemCard, selectedItems, keepColor
     // Update price
     const priceElement = itemCard.querySelector('.item-info p');
     priceElement.textContent = selectedItem.precio > 0 
-        ? `Precio: ${selectedItem.precio} pesos` 
+        ? `Precio: $ ${selectedItem.precio} ` 
         : 'Preguntar precio';
 
     // Update WhatsApp button data

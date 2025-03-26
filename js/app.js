@@ -168,7 +168,7 @@ function loadItems(page = 1, selectedCategory = 'all', searchQuery = '') {
             <div class="talle-container"></div>
             <p>Color: ${firstItem.color}</p>
             <p class="price" id="precio-${firstItem.id}">
-                ${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}
+                ${firstItem.precio > 0 ? `Precio: $ ${firstItem.precio}` : 'Preguntar precio'}
             </p>
             <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
                 data-item='${JSON.stringify(firstItem)}'>
@@ -270,7 +270,7 @@ function loadRemerasOnly(searchQuery = '') {
             itemCard.innerHTML = `
                 <img src="${firstItem.imageUrl || 'img/noImage.jpg'}" alt="${firstItem.nombre}" class="remera-image">
                 <h3>${firstItem.nombre}</h3>
-                <p>${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}</p>
+                <p>${firstItem.precio > 0 ? `Precio: $ ${firstItem.precio} ` : 'Preguntar precio'}</p>
                 <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
                     data-item='${JSON.stringify(firstItem)}'>
                     ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
@@ -336,7 +336,7 @@ function loadPantalonesOnly(searchQuery = '') {
             itemCard.innerHTML = `
                 <img src="${firstItem.imageUrl || 'img/noImage.jpg'}" alt="${firstItem.nombre}" class="pantalon-image">
                 <h3>${firstItem.nombre}</h3>
-                <p>${firstItem.precio > 0 ? `Precio: ${firstItem.precio} pesos` : 'Preguntar precio'}</p>
+                <p>${firstItem.precio > 0 ? `Precio: $ ${firstItem.precio} ` : 'Preguntar precio'}</p>
                 <button class="btn ${firstItem.precio > 0 ? 'me-interesa-btn' : 'preguntar-precio-btn'}" 
                     data-item='${JSON.stringify(firstItem)}'>
                     ${firstItem.precio > 0 ? 'Me interesa' : 'Preguntar precio'}
@@ -437,7 +437,7 @@ function updateCardWithSelectedTalle(card, selectedItem) {
         if (priceElement) {
             priceElement.id = `precio-${selectedItem.id}`; // Update the ID to match the selected item's ID
             priceElement.textContent = 
-                selectedItem.precio > 0 ? `Precio: ${selectedItem.precio} pesos` : 'Preguntar precio';
+                selectedItem.precio > 0 ? `Precio: $ ${selectedItem.precio}` : 'Preguntar precio';
         } else {
             console.error(`Price element not found for item ID: ${selectedItem.id}`);
             console.log("Card HTML:", card.innerHTML); // Debugging log

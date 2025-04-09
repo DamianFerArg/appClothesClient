@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         // Clear dropdowns and set default labels
         dropdowns.clothing.innerHTML = '<option value="">Ropa</option>';
-        dropdowns.bedding.innerHTML = '<option value="">Cama</option>';
+        dropdowns.bedding.innerHTML = '<option value="">Blanqueria</option>';
         dropdowns.other.innerHTML = '<option value="">Otros</option>';
         dropdowns.custom1.innerHTML = '<option value="">Toallones</option>';
         dropdowns.custom2.innerHTML = '<option value="">Ropa Interior</option>';

@@ -409,10 +409,8 @@ const categoryFromURL = params.get("categoria");
 document.getElementById("category-title").textContent = categoryFromURL ? `Categoría: ${categoryFromURL}` : "Categoría no encontrada";
 
 // Load categories into dropdown
-loadCategories();
 
 // Set event listener on dropdown to handle category change
-document.getElementById("category-dropdown").addEventListener("change", handleCategoryChange);
 
 // Add search functionality to filter items
 document.getElementById('search-box').addEventListener('input', function () {
@@ -438,13 +436,7 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 });
-document.getElementById("category-dropdown").addEventListener("change", function () {
-    let selectedCategory = this.value;
-    if (selectedCategory) {
-        // Reload the page with the selected category as a URL parameter
-        window.location.href = window.location.pathname + "?categoria=" + selectedCategory;
-    }
-});
+
 document.addEventListener("DOMContentLoaded", function () {
     const menuToggle = document.querySelector(".menu-toggle");
     const fullScreenMenu = document.querySelector(".full-screen-menu");

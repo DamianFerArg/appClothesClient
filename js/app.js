@@ -580,3 +580,23 @@ document.addEventListener('DOMContentLoaded', function () {
         img.setAttribute('loading', 'lazy'); // Set loading="lazy" for each image
     });
 });
+
+const month = new Date().getMonth() + 1;
+let season = "";
+
+if (month >= 3 && month <= 5) {
+    season = "OTOÑO";
+} else if (month >= 6 && month <= 8) {
+    season = "INVIERNO";
+} else if (month >= 9 && month <= 11) {
+    season = "PRIMAVERA";
+} else {
+    season = "VERANO";
+}
+
+const year = new Date().getFullYear();
+const seasonTexts = document.querySelectorAll(".seasonText");
+
+seasonTexts.forEach(element => {
+    element.innerText = `TEMPORADA ${season} ${year}`;
+});
